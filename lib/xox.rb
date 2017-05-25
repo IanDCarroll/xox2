@@ -1,0 +1,2 @@
+class XoxGame
+end
