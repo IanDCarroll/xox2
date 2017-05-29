@@ -1,3 +1,6 @@
-require_relative 'lib/xox'
+require_relative 'lib/cli_shell'
 
-XoxGame.new
+game = XoxCli.new
+
+game.display
+game.choose_space
