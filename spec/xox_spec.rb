@@ -10,8 +10,10 @@ describe 'XoxGame board' do
   context 'when a new game starts' do
     Given(:game) { XoxGame.new }
     When(:subject) { game.board }
-    Then { [ "","","",
-             "","","",
-             "","","" ] == subject }
-  end 
+    Then { [ "1","2","3",
+             "4","5","6",
+             "7","8","9" ] == subject }
+  end
+
+ 
 end

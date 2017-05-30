@@ -4,7 +4,6 @@ class Adapter
 
   def initialize(game = XoxGame.new)
     @spaces = game.board
-    number_empty_spaces
   end
 
   def render
@@ -20,18 +19,4 @@ class Adapter
     padding = [" ", " "]
     padding.join(row)
   end
-
-  def number_empty_spaces
-    (0..8).each do |i|
-      if empty?(i)
-        num = i + 1 
-        @spaces[i] = num.to_s
-      end
-    end
-  end
-
-  def empty?(space)
-    @spaces[space] == ""
-  end
 end
-

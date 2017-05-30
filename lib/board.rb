@@ -4,7 +4,7 @@ class Board
   def initialize
     @spaces = []
     @empty_space = ""
-    9.times do @spaces << @empty_space end
+    (1..9).each do |i| @spaces << i.to_s end
   end
 
   def mark(player_mark, space)
