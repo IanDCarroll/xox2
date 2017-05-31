@@ -1,17 +1,34 @@
-require_relative 'cli_adapter'
-
 class XoxCli
 
-  def initialize(adapter = Adapter.new)
+  def initialize(adapter)
     @adapter = adapter
+    @playing = true
   end
 
-  def display
-    puts @adapter.render
+  def play
+    while @playing
+      display(@adapter.render)
+      choose_space
+    end
+  end
+
+  def display(message)
+    puts message
   end
 
   def choose_space
     print "> "
-    gets.chomp
+    input = gets.chomp
+    if not want_to_exit?(input)
+      display(@adapter.relay(input))
+    end
+  end
+
+  def want_to_exit?(input)
+    if input == "exit"
+      @playing = false
+      return true
+    end
+    false
   end 
 end

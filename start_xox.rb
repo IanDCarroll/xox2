@@ -1,6 +1,11 @@
+require_relative 'lib/board'
+require_relative 'lib/xox'
+require_relative 'lib/cli_adapter'
 require_relative 'lib/cli_shell'
 
-game = XoxCli.new
+board = Board.new
+game = XoxGame.new(board)
+adapter = Adapter.new(board, game)
+shell = XoxCli.new(adapter)
 
-game.display
-game.choose_space
+shell.play
