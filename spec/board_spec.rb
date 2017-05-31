@@ -26,10 +26,18 @@ describe 'Board mark' do
 
   context 'when player 2 makes a move after player 1' do
     Given(:board) { Board.new }
-    When(:change2) { board.mark("X", 5) 
+    When(:change) { board.mark("X", 5) 
                      board.mark("O", 1) }
     Then { [ "1", "O", "3",
              "4", "5", "X",
              "7", "8", "9" ] == board.spaces }
+  end
+end
+
+describe 'Board size' do
+  context 'when board is nine squares' do
+    Given(:board) { Board.new }
+    When(:size) { board.size }
+    Then { 9 == size }
   end
 end
