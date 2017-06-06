@@ -1,5 +1,5 @@
-require_relative 'validator'
-require_relative 'style'
+require 'validator'
+require 'style'
 
 class Adapter
 

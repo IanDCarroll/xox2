@@ -1,11 +1,13 @@
-require_relative 'lib/board'
-require_relative 'lib/xox'
-require_relative 'lib/cli_adapter'
-require_relative 'lib/cli_shell'
+$: << File.expand_path(File.dirname(__FILE__)) + '/lib'
+
+require 'board'
+require 'rules'
+require 'adapter'
+require 'imperative_shell'
 
 board = Board.new
-game = XoxGame.new(board)
-adapter = Adapter.new(board, game)
-shell = XoxCli.new(adapter)
+rules = Rules.new(board)
+adapter = Adapter.new(board, rules)
+shell = ImperativeShell.new(adapter)
 
 shell.play

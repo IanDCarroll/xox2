@@ -1,8 +1,9 @@
-class XoxCli
+class ImperativeShell
 
   def initialize(adapter)
     @adapter = adapter
     @playing = true
+    @exit_command = 'exit'
   end
 
   def play
@@ -19,16 +20,12 @@ class XoxCli
   def choose_space
     print "> "
     input = gets.chomp
-    if not want_to_exit?(input)
+    if not_want_to_exit?(input)
       display(@adapter.relay(input))
     end
   end
 
-  def want_to_exit?(input)
-    if input == "exit"
-      @playing = false
-      return true
-    end
-    false
+  def not_want_to_exit?(input)
+    @playing = input != @exit_command
   end 
 end

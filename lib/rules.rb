@@ -1,4 +1,4 @@
-class XoxGame
+class Rules
 
   def initialize(board)
     @board = board
