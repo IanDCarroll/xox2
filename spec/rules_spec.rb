@@ -10,20 +10,22 @@ end
 describe 'Rules mark' do
   context 'when a player marks the board' do
     Given(:board) { Board.new }
-    Given(:game) { Rules.new(board) }
-    When(:subject) { game.mark(4) }
+    Given(:rules) { Rules.new(board) }
+    When(:subject) { rules.mark(4) }
     Then { [ "1","2","3",
              "4","X","6",
              "7","8","9" ] == board.spaces }
+    And { ["X", 4] == subject } 
   end
 
-  context 'when a player marks the board' do
+  context 'when the second player marks the board' do
     Given(:board) { Board.new }
-    Given(:game) { Rules.new(board) }
-    When(:subject) { game.mark(4) 
-                     game.mark(0) }
+    Given(:rules) { Rules.new(board) }
+    Given { rules.mark(4) }
+    When(:subject) { rules.mark(0) }
     Then { [ "O","2","3",
              "4","X","6",
              "7","8","9" ] == board.spaces }
+    And { ["O", 0] == subject }
   end
 end
