@@ -1,8 +1,23 @@
+require 'style'
+
 class Validator
   attr_reader :error_message
 
   def initialize
-    @error_message = "please choose an available square"
+    @style = Style.new
+    @error_message = { message: @style.error,
+                       command: [true,true] }
+    @exit = "exit"
+    @start = "start"
+  end
+
+  def command?(string)
+    if @exit == string
+      return @exit
+    elsif @start == string
+      return @start
+    end
+    false
   end
 
   def valid?(board, choice)

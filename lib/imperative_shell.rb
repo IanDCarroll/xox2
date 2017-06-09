@@ -2,54 +2,48 @@ require 'style'
 
 class ImperativeShell
 
-  def initialize(adapter, rules)
-    @adapter = adapter
-    @rules = rules
+  def initialize(adapter)
     @style = Style.new
+    @adapter = adapter
     @playing = true
-    @exit_command = 'exit'
+    @play_again = true
   end
 
   def play
     while @playing
       display(@adapter.render)
-      choose_space
+      get_choice
+      display(@message) 
     end
-    print "Good game!\nType \"yes\" to play again. "
-    input = gets.chomp
-    if input == 'yes'
-      @rules.reset
-      @playing = true
-      play
-    else
-      display("Thanks for playing!")
+    play_again?
+  end
+
+  def play_again?
+    if @play_again
+      display(@style.play_again)
+      if get_raw_input == 'start'
+        @playing = true
+        @adapter.relay("start")
+        play
+      else
+        display(@style.farewell)
+      end
     end
+  end
+
+  def get_choice 
+    status = @adapter.relay(get_raw_input)
+    @playing = status[:command][0]
+    @play_again = status[:command][1]
+    @message = status[:message]
   end
 
   def display(message)
     puts message
   end
 
-  def choose_space
-    print "> "
+  def get_raw_input
+    print @style.prompt
     input = gets.chomp
-    exit_command?(input)
-    choice = @adapter.relay(input)
-    display(choice)
-    if game_over?(choice) 
-      display(@adapter.render)
-      @playing = false
-    end
   end
-
-  def game_over?(choice)
-    choice == @style.draw_message || choice.end_with?(@style.win_message) 
-  end
-
-  def exit_command?(input)
-    if input == @exit_command
-      display("Thanks for playing!")
-      exit
-    end
-  end 
 end
