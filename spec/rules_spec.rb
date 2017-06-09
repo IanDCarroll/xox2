@@ -29,3 +29,21 @@ describe 'Rules mark' do
     And { ["O", 0] == subject }
   end
 end
+
+describe "Rules reset" do
+  context "when a played game is reset" do
+    Given(:reset_game) { { player: "O",
+                           space: "any value",
+                           moves: 0,
+                           size: 9,
+                           board: [ "1", "2", "3",
+                                    "4", "5", "6",
+                                    "7", "8", "9" ] } }
+    Given(:game_moves) { [ "5", "2", "1", "9", "7", "4", "3" ] }
+    Given(:board) { Board.new }
+    Given(:rules) { Rules.new(board) }
+    When { (0...game_moves.length).each do |i| rules.mark(i) end }
+    When(:subject) { rules.reset }
+    Then { reset_game == rules.status("any value") }
+  end
+end

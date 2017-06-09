@@ -2,8 +2,9 @@ require 'style'
 
 class ImperativeShell
 
-  def initialize(adapter)
+  def initialize(adapter, rules)
     @adapter = adapter
+    @rules = rules
     @style = Style.new
     @playing = true
     @exit_command = 'exit'
@@ -14,6 +15,15 @@ class ImperativeShell
       display(@adapter.render)
       choose_space
     end
+    print "Good game!\nType \"yes\" to play again. "
+    input = gets.chomp
+    if input == 'yes'
+      @rules.reset
+      @playing = true
+      play
+    else
+      display("Thanks for playing!")
+    end
   end
 
   def display(message)
@@ -23,13 +33,12 @@ class ImperativeShell
   def choose_space
     print "> "
     input = gets.chomp
-    if not_want_to_exit?(input)
-      choice = @adapter.relay(input)
-      display(choice)
-      if game_over?(choice) 
-        display(@adapter.render)
-        @playing = false
-      end
+    exit_command?(input)
+    choice = @adapter.relay(input)
+    display(choice)
+    if game_over?(choice) 
+      display(@adapter.render)
+      @playing = false
     end
   end
 
@@ -37,7 +46,10 @@ class ImperativeShell
     choice == @style.draw_message || choice.end_with?(@style.win_message) 
   end
 
-  def not_want_to_exit?(input)
-    @playing = input != @exit_command
+  def exit_command?(input)
+    if input == @exit_command
+      display("Thanks for playing!")
+      exit
+    end
   end 
 end

@@ -31,4 +31,10 @@ class Rules
       size: @board.size, 
       board: @board.spaces }
   end
+
+  def reset
+    @board.paint_numbers_over_spaces
+    @moves = 0
+    @current_player = @player[1]
+  end
 end

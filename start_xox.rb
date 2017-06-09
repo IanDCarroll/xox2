@@ -8,6 +8,6 @@ require 'imperative_shell'
 board = Board.new
 rules = Rules.new(board)
 adapter = Adapter.new(board, rules)
-shell = ImperativeShell.new(adapter)
+shell = ImperativeShell.new(adapter, rules)
 
 shell.play
