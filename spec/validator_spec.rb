@@ -42,3 +42,26 @@ describe 'Validator valid?' do
     Then { false == subject }
   end
 end
+
+describe 'Validator command?' do
+  context 'when system command is passed not a command' do
+    Given(:string) { "not a command" }
+    Given(:judge) { Validator.new }
+    When(:subject) { judge.command?(string) }
+    Then { false == subject }
+  end
+
+  context 'when system command is passed exit' do
+    Given(:string) { "exit" }
+    Given(:judge) { Validator.new }
+    When(:subject) { judge.command?(string) }
+    Then { "exit" == subject }
+  end
+
+  context 'when system command is passed start' do
+    Given(:string) { "start" }
+    Given(:judge) { Validator.new }
+    When(:subject) { judge.command?(string) }
+    Then { "start" == subject }
+  end
+end

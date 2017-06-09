@@ -46,7 +46,7 @@ describe 'Adapter relay' do
     Given(:adapter) { Adapter.new(game_runner) }
     When(:subject) { adapter.relay("5") }
     Then { { message: "X takes square 5",
-             command: true }  == subject }
+             command: [true,true] }  == subject }
   end
 
   context 'when format is passed a different move message' do
@@ -56,7 +56,7 @@ describe 'Adapter relay' do
     When(:subject) { adapter.relay("5") 
                      adapter.relay("1") }
     Then { { message: "O takes square 1",
-             command: true } == subject }
+             command: [true,true] } == subject }
   end
 
   context 'when format is passed a draw message' do
@@ -67,7 +67,7 @@ describe 'Adapter relay' do
     Given { (0..7).each do |i| adapter.relay(drawn_game[i]) end}
     When(:subject) { adapter.relay(drawn_game[8]) }
     Then { { message: "The game is a draw.",
-             command: false } == subject }
+             command: [false,true] } == subject }
   end
 
   context 'when format is passed a win message' do
@@ -78,7 +78,7 @@ describe 'Adapter relay' do
     Given { (0..5).each do |i| adapter.relay(won_game[i]) end}
     When(:subject) { adapter.relay(won_game[6]) }
     Then { { message: "X wins the game!",
-             command: false } == subject }
+             command: [false,true] } == subject }
   end
 
   context 'when format is passed a different win message' do
@@ -89,6 +89,29 @@ describe 'Adapter relay' do
     Given { (0..6).each do |i| adapter.relay(won_game[i]) end}
     When(:subject) { adapter.relay(won_game[7]) }
     Then { { message: "O wins the game!",
-             command: false } == subject }
+             command: [false,true] } == subject }
+  end
+
+  context 'when relay is passses "start" as a keyword' do
+    Given(:won_game) { [ "2", "5", "8", "1", "9", "7", "3", "4" ] }
+    Given(:board) { Board.new}
+    Given(:game_runner) { GameRunner.new(board, Rules.new(board))}
+    Given(:adapter) { Adapter.new(game_runner) }
+    Given { (0..7).each do |i| adapter.relay(won_game[i]) end}
+    When(:subject) { adapter.relay("start") }
+    Then { { message: "new game",
+             command: [true,true] } == subject }
+  end
+
+
+  context 'when relay is passses "exit" as a keyword' do
+    Given(:won_game) { [ "2", "5", "8", "1", "9", "7", "3" ] }
+    Given(:board) { Board.new}
+    Given(:game_runner) { GameRunner.new(board, Rules.new(board))}
+    Given(:adapter) { Adapter.new(game_runner) }
+    Given { (0..6).each do |i| adapter.relay(won_game[i]) end}
+    When(:subject) { adapter.relay("exit") }
+    Then { { message: "Thanks for playing!",
+             command: [false,false] } == subject }
   end
 end

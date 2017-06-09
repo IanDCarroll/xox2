@@ -15,7 +15,7 @@ class GameRunner
   end
 
   def exit_command
-    message_to_shell(["exit", "game"], false)
+    message_to_shell(["end", "game"], false, false)
   end
 
   def set_new_game
@@ -23,11 +23,12 @@ class GameRunner
     message_to_shell(["new", "game"])
   end
 
-  def message_to_shell(message, will_to_live = true)
+  def message_to_shell(message, will_to_live = true, will_to_reencarnate = true)
     if message[1] == "draw" || message[1] == "win"
       will_to_live = false
     end
     { continue_game?: will_to_live,
+      play_again?: will_to_reencarnate,
       user_message: message, 
       board: @board.spaces }
   end

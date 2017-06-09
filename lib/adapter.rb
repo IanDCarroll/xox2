@@ -11,11 +11,18 @@ class Adapter
   end
 
   def relay(user_input)
+    if @judge.command?(user_input)
+      @status = @game_runner.play(user_input)
+      return { message: format(@status[:user_message]),
+               command: [ @status[:continue_game?],
+                          @status[:play_again?] ] }
+    end
     choice = parse(user_input)
     if @judge.valid?(@status[:board], choice)
       @status = @game_runner.play(choice)
       return { message: format(@status[:user_message]),
-               command: @status[:continue_game?] }
+               command: [ @status[:continue_game?],
+                          @status[:play_again?] ] }
     end
     @judge.error_message
   end
@@ -47,6 +54,10 @@ private
       return format_draw
     elsif array[1] == "win"
       return format_win(array)
+    elsif array == ["new", "game"]
+      return format_new
+    elsif array == ["end", "game"]
+      return format_end
     end
     format_move(array)
   end
@@ -62,5 +73,13 @@ private
 
   def format_draw
     @style.draw_message
+  end
+
+  def format_new
+    @style.new_game_message
+  end
+
+  def format_end
+    @style.end_game_message
   end
 end
