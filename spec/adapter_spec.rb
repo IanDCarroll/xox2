@@ -70,25 +70,25 @@ describe 'Adapter relay' do
              command: false } == subject }
   end
 
-#  context 'when format is passed a win message' do
-#    Given(:won_game) { [ "5", "2", "1", "9", "7", "4", "3" ] }
-#    Given(:board) { Board.new}
-#    Given(:game_runner) { GameRunner.new(board, Rules.new(board))}
-#    Given(:adapter) { Adapter.new(game_runner) }
-#    Given { (0..5).each do |i| adapter.relay(won_game[i]) end}
-#    When(:subject) { adapter.relay(won_game[6]) }
-#    Then { { message: "X wins the game!",
-#             command: false } == subject }
-#  end
-#
-#  context 'when format is passed a different win message' do
-#    Given(:won_game) { [ "2", "5", "8", "1", "9", "7", "3", "4" ] }
-#    Given(:board) { Board.new}
-#    Given(:game_runner) { GameRunner.new(board, Rules.new(board))}
-#    Given(:adapter) { Adapter.new(game_runner) }
-#    Given { (0..6).each do |i| adapter.relay(won_game[i]) end}
-#    When(:subject) { adapter.relay(won_game[7]) }
-#    Then { { message: "O wins the game!",
-#             command: false } == subject }
-#  end
+  context 'when format is passed a win message' do
+    Given(:won_game) { [ "5", "2", "1", "9", "7", "4", "3" ] }
+    Given(:board) { Board.new}
+    Given(:game_runner) { GameRunner.new(board, Rules.new(board))}
+    Given(:adapter) { Adapter.new(game_runner) }
+    Given { (0..5).each do |i| adapter.relay(won_game[i]) end}
+    When(:subject) { adapter.relay(won_game[6]) }
+    Then { { message: "X wins the game!",
+             command: false } == subject }
+  end
+
+  context 'when format is passed a different win message' do
+    Given(:won_game) { [ "2", "5", "8", "1", "9", "7", "3", "4" ] }
+    Given(:board) { Board.new}
+    Given(:game_runner) { GameRunner.new(board, Rules.new(board))}
+    Given(:adapter) { Adapter.new(game_runner) }
+    Given { (0..6).each do |i| adapter.relay(won_game[i]) end}
+    When(:subject) { adapter.relay(won_game[7]) }
+    Then { { message: "O wins the game!",
+             command: false } == subject }
+  end
 end
