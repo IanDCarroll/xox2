@@ -12,23 +12,24 @@ class GameRunner
 
   def start_game
     while @playing
-      @adapter.display_board
-      @adapter.push_status(play(@adapter.relay))
-      @adapter.display_message
+      @adapter.push_move(play(@adapter.pull_move))
     end
+    play_again?
+  end
+
+  def play_again?
     if @play_again
-      @adapter.display_board
-      @adapter.push_status(play_again)
-      @adapter.display_message
-      again = @adapter.relay
-      if again == 'start'
-        set_new_game
-        start_game
-      else
-        @adapter.push_status(exit_command)
-        @adapter.display_message
-      end
+      @adapter.push_move(play_again)
+      execute_decision
     end
+  end
+
+  def execute_decision
+    if @adapter.relay == 'start'
+      set_new_game
+      return start_game
+    end
+    @adapter.push_move(exit_command)
   end
 
   def play(command)

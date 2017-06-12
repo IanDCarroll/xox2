@@ -10,6 +10,29 @@ class Adapter
     @style = Style.new
     @status = { board: ["1","2","3","4","5","6","7","8","9"], 
                 message: ["new", "game"] }
+    @previous_board = ""
+  end
+
+  def pull_move
+    display_board
+    relay
+  end
+
+  def push_move(message)
+    push_status(message)
+    display_message
+    display_board
+  end
+
+  def display_message
+    @shell.display(format_message)
+  end
+
+  def display_board
+    if render_board != @previous_board
+      @shell.display(render_board)
+    end
+    @previous_board = render_board
   end
 
   def relay(user_input = @shell.get_user_input)
@@ -21,14 +44,6 @@ class Adapter
       return choice
     end
     "error"
-  end
-
-  def display_board
-    @shell.display(render_board)
-  end
-
-  def display_message
-    @shell.display(format_message)
   end
 
   def render_board
