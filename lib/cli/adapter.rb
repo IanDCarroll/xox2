@@ -1,6 +1,6 @@
-require 'imperative_shell'
-require 'validator'
-require 'style'
+require 'cli/imperative_shell'
+require 'cli/validator'
+require 'cli/style'
 
 class Adapter
 

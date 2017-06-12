@@ -1,5 +1,5 @@
 require 'rspec-given'
-require 'imperative_shell'
+require 'cli/imperative_shell'
 
 describe 'ImperativeShell init' do
   Given(:subject) { ImperativeShell.new }

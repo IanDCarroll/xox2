@@ -1,5 +1,5 @@
 require 'rspec-given'
-require 'adapter'
+require 'cli/adapter'
 
 describe 'Adapter init' do
   Given(:status) { { board: Array.new, message: Array.new } }

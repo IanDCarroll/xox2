@@ -1,4 +1,4 @@
-require 'style'
+require 'cli/style'
 
 class ImperativeShell
 

@@ -1,5 +1,5 @@
 require 'rspec-given'
-require 'validator'
+require 'cli/validator'
 
 describe 'Validator init' do
   Given(:subject) { Validator.new }

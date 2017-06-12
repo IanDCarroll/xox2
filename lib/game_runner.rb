@@ -1,8 +1,8 @@
-require 'adapter'
+require 'cli/adapter'
 
 class GameRunner
 
-  def initialize(board, rules, adapter = Adapter.new)
+  def initialize(board, rules, adapter)
     @board = board
     @rules = rules
     @adapter = adapter
