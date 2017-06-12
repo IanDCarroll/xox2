@@ -2,11 +2,11 @@ class Style
   attr_reader :wall
   attr_reader :shelf
   attr_reader :padding
-  attr_reader :move_message
-  attr_reader :draw_message
-  attr_reader :win_message
-  attr_reader :new_game_message
-  attr_reader :end_game_message
+  attr_reader :move
+  attr_reader :draw
+  attr_reader :win
+  attr_reader :new_game
+  attr_reader :end_game
   attr_reader :play_again
   attr_reader :farewell
   attr_reader :error
@@ -16,11 +16,11 @@ class Style
     @wall = " | "
     @shelf = "\n---+---+---\n"
     @padding = " "
-    @move_message = " takes square "
-    @draw_message = "The game is a draw."
-    @win_message = " wins the game!"
-    @new_game_message = "new game"
-    @end_game_message = "Thanks for playing!"
+    @move = " takes square "
+    @draw = "The game is a draw."
+    @win = " wins the game!"
+    @new_game = "new game"
+    @end_game = "Thanks for playing!"
     @play_again = "Type \"start\" to play again."
     @farewell = "Thanks for playing!"
     @error = "please choose an available square"

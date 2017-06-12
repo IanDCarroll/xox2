@@ -1,7 +1,7 @@
 require 'rspec-given'
 require 'imperative_shell'
 
-describe 'XoxCli init' do
-  Given(:subject) { ImperativeShell.new("fake adapter") }
+describe 'ImperativeShell init' do
+  Given(:subject) { ImperativeShell.new }
   Then { raise_error != subject }
 end

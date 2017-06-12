@@ -1,36 +1,61 @@
+require 'imperative_shell'
 require 'validator'
 require 'style'
 
 class Adapter
 
-  def initialize(game_runner)
-    @game_runner = game_runner
+  def initialize(shell = ImperativeShell.new)
+    @shell = shell
     @judge = Validator.new
     @style = Style.new
-    @status = @game_runner.play("start")
+    @status = { board: ["1","2","3","4","5","6","7","8","9"], 
+                message: ["new", "game"] }
   end
 
-  def relay(user_input)
+  def relay(user_input = @shell.get_user_input)
     if @judge.command?(user_input)
-      @status = @game_runner.play(user_input)
-      return { message: format(@status[:user_message]),
-               command: [ @status[:continue_game?],
-                          @status[:play_again?] ] }
+      return user_input
     end
-    choice = parse(user_input)
+    choice = input_to_i(user_input)
     if @judge.valid?(@status[:board], choice)
-      @status = @game_runner.play(choice)
-      return { message: format(@status[:user_message]),
-               command: [ @status[:continue_game?],
-                          @status[:play_again?] ] }
+      return choice
     end
-    @judge.error_message
+    "error"
   end
 
-  def render
+  def display_board
+    @shell.display(render_board)
+  end
+
+  def display_message
+    @shell.display(format_message)
+  end
+
+  def render_board
     rows = []
     (0...board_size).step(3) do |i| rows << render_row(i) end
-    rows.join(@style.shelf) 
+    rows.join(@style.shelf)
+  end
+
+  def format_message
+    if @status[:message][1] == "draw"
+      return @style.draw
+    elsif @status[:message][1] == "win"
+      return format_win(@status[:message])
+    elsif @status[:message] == ["new", "game"]
+      return @style.new_game
+    elsif @status[:message] == ["end", "game"]
+      return @style.end_game
+    elsif @status[:message] == ["bad", "move"]
+      return @style.error
+    elsif @status[:message] == ["play", "again"]
+      return @style.play_again
+    end
+    format_move(@status[:message])
+  end
+
+  def push_status(status)
+    @status = status
   end
 
 private
@@ -41,7 +66,7 @@ private
     padding.join(row)
   end
 
-  def parse(user_input)
+  def input_to_i(user_input)
     user_input.to_i - 1
   end
 
@@ -49,37 +74,12 @@ private
     @status[:board].length
   end
 
-  def format(array)
-    if array[1] == "draw"
-      return format_draw
-    elsif array[1] == "win"
-      return format_win(array)
-    elsif array == ["new", "game"]
-      return format_new
-    elsif array == ["end", "game"]
-      return format_end
-    end
-    format_move(array)
-  end
-
   def format_move(array)
     array[1] += 1
-    array.join(@style.move_message)
+    array.join(@style.move)
   end
 
   def format_win(array)
-    array[0] + @style.win_message
-  end
-
-  def format_draw
-    @style.draw_message
-  end
-
-  def format_new
-    @style.new_game_message
-  end
-
-  def format_end
-    @style.end_game_message
+    array[0] + @style.win
   end
 end

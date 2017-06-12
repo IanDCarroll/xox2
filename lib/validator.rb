@@ -1,12 +1,7 @@
-require 'style'
-
 class Validator
   attr_reader :error_message
 
   def initialize
-    @style = Style.new
-    @error_message = { message: @style.error,
-                       command: [true,true] }
     @exit = "exit"
     @start = "start"
   end
