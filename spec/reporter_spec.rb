@@ -1,5 +1,6 @@
 require 'rspec/given'
 require 'reporter'
+require 'game_constants'
 
 describe 'Reporter init' do
   context 'when reporter initializes' do
@@ -32,6 +33,7 @@ describe 'Reporter report' do
   end
 
   context 'when reporter encounters a full board' do
+    Given(:const) { GameConstants.new }
     Given(:board) { ["O","X","O",
                      "X","X","O",
                      "X","O","X"] }
@@ -39,7 +41,7 @@ describe 'Reporter report' do
                        board: board} }
     Given(:subject) { Reporter.new }
     When(:action) { subject.report(status) }
-    Then { [ "game", "draw" ] == action }
+    Then { const.draw == action }
   end
 
   context 'when reporter encounters a win in row 1' do

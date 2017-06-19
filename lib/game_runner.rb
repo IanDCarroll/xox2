@@ -1,8 +1,10 @@
 require 'cli/adapter'
+require 'game_constants'
 
 class GameRunner
 
   def initialize(board, rules, adapter)
+    @const = GameConstants.new
     @board = board
     @rules = rules
     @adapter = adapter
@@ -25,7 +27,7 @@ class GameRunner
   end
 
   def execute_decision
-    if @adapter.relay == 'start'
+    if @adapter.relay == @const.start
       set_new_game
       return start_game
     end
@@ -33,11 +35,11 @@ class GameRunner
   end
 
   def play(command)
-    if command == 'start'
+    if command == @const.start
       return set_new_game
-    elsif command == 'exit'
+    elsif command == @const.exit
       return exit_command
-    elsif command == 'error'
+    elsif command == @const.error
       return error_message
     end
     play_report = @rules.mark(command)
@@ -48,21 +50,21 @@ class GameRunner
   end
 
   def error_message
-    message_to_shell(["bad", "move"])
+    message_to_shell(@const.bad_move)
   end
 
   def end_game?(play_report)
-    play_report[1] == "win" || play_report[1] == "draw"
+    play_report[1] == @const.win || play_report == @const.draw
   end
 
   def exit_command
     @playing = false
     @play_again = false
-    message_to_shell(["end", "game"])
+    message_to_shell(@const.end_game)
   end
 
   def play_again
-    message_to_shell(["play", "again"])
+    message_to_shell(@const.play_again)
   end
 
   def set_new_game
@@ -72,7 +74,7 @@ class GameRunner
   end
 
   def new_game
-    message_to_shell(["new", "game"])
+    message_to_shell(@const.new_game)
   end
 
   def message_to_shell(message)

@@ -1,13 +1,15 @@
 require 'reporter'
+require 'game_constants'
 
 class Rules
 
   def initialize(board)
+    @reporter = Reporter.new
+    @const = GameConstants.new
     @board = board
-    @player = [ "X", "O" ]
+    @player = @const.players
     @current_player = @player[1]
     @moves = 0
-    @reporter = Reporter.new
   end
 
   def mark(space)

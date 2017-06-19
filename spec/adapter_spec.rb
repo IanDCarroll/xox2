@@ -1,5 +1,6 @@
 require 'rspec-given'
 require 'cli/adapter'
+require 'game_constants'
 
 describe 'Adapter init' do
   Given(:status) { { board: Array.new, message: Array.new } }
@@ -125,7 +126,8 @@ describe 'Adapter format_message' do
   end
 
   context 'when format_message is passed a draw message' do
-    Given(:status) { { message: [ "game", "draw" ] } }
+    Given(:const) { GameConstants.new }
+    Given(:status) { { message: const.draw } }
     Given(:adapter) { Adapter.new }
     When(:subject) { adapter.push_status(status)
                      adapter.format_message }
@@ -148,16 +150,18 @@ describe 'Adapter format_message' do
     Then { "Gryffindor wins the game!" == subject }
   end
 
-  context 'when format_message is passsed [ "new", "game" ] as a message' do
-    Given(:status) { { message: ["new", "game"] } }
+  context 'when format_message is passsed a message to start a new game' do
+    Given(:const) { GameConstants.new }
+    Given(:status) { { message: const.new_game } }
     Given(:adapter) { Adapter.new }
     When(:subject) { adapter.push_status(status)
                      adapter.format_message }
     Then { "new game" == subject }
   end
 
-  context 'when format_message is passsed [ "end", "game" ] as a message' do
-    Given(:status) { { message: ["end", "game"] } }
+  context 'when format_message is passsed a message to end the game' do
+    Given(:const) { GameConstants.new }
+    Given(:status) { { message: const.end_game } }
     Given(:adapter) { Adapter.new }
     When(:subject) { adapter.push_status(status)
                      adapter.format_message }

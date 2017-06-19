@@ -1,6 +1,7 @@
 require 'cli/imperative_shell'
 require 'cli/validator'
 require 'cli/style'
+require 'game_constants'
 
 class Adapter
 
@@ -8,8 +9,9 @@ class Adapter
     @shell = shell
     @judge = Validator.new
     @style = Style.new
+    @const = GameConstants.new
     @status = { board: ["1","2","3","4","5","6","7","8","9"], 
-                message: ["new", "game"] }
+                message: @const.new_game }
     @previous_board = ""
   end
 
@@ -53,17 +55,17 @@ class Adapter
   end
 
   def format_message
-    if @status[:message][1] == "draw"
+    if @status[:message] == @const.draw
       return @style.draw
-    elsif @status[:message][1] == "win"
+    elsif @status[:message][1] == @const.win
       return format_win(@status[:message])
-    elsif @status[:message] == ["new", "game"]
+    elsif @status[:message] == @const.new_game
       return @style.new_game
-    elsif @status[:message] == ["end", "game"]
+    elsif @status[:message] == @const.end_game
       return @style.end_game
-    elsif @status[:message] == ["bad", "move"]
+    elsif @status[:message] == @const.error
       return @style.error
-    elsif @status[:message] == ["play", "again"]
+    elsif @status[:message] == @const.play_again
       return @style.play_again
     end
     format_move(@status[:message])

@@ -1,8 +1,9 @@
+require 'game_constants'
+
 class Reporter
 
   def initialize
-    @winning_sets = [ [0,1,2], [3,4,5], [6,7,8], [0,3,6],
-                      [1,4,7], [2,5,8], [0,4,8], [2,4,6] ]
+    @const = GameConstants.new
   end
 
   def report(status)
@@ -18,9 +19,9 @@ class Reporter
 
   def endgame(status)
     if win?(status)
-      return [ status[:player],  "win" ]
+      return @const.winner(status[:player])
     elsif out_of_moves?(status)
-      return [ "game", "draw" ]
+      return @const.draw
     end
     false
   end
@@ -30,7 +31,7 @@ class Reporter
   end
 
   def win?(status)
-    @winning_sets.each do |set|
+    @const.winning_sets.each do |set|
       if winning_set?(status, set)
         return true
       end

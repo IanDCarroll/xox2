@@ -2,6 +2,7 @@ require 'rspec/given'
 require 'game_runner'
 require 'board'
 require 'rules'
+require 'game_constants'
 
 describe 'GameRunner init' do
   context 'when GameRunner starts up' do
@@ -14,11 +15,12 @@ end
 
 describe 'GameRunner play' do
   context 'when play is called as a new game' do
+    Given(:const) { GameConstants.new }
     Given(:board) { Board.new }
     Given(:rules) { Rules.new(board) }
     Given(:game_runner) { GameRunner.new(board, rules, "fake adapter") }
     When(:subject) { game_runner.play('start') }
-    Then { { message: [ "new", "game"], 
+    Then { { message: const.new_game, 
              board: board.spaces } == subject }
   end
 
@@ -46,24 +48,26 @@ describe 'GameRunner play' do
   end
 
   context 'when play is called to reset the game' do
+    Given(:const) { GameConstants.new }
     Given(:board) { Board.new }
     Given(:rules) { Rules.new(board) }
     Given(:game_runner) { GameRunner.new(board, rules, "fake adapter") }
     When { 7.times do |i| game_runner.play(i) end }
     When(:subject) { game_runner.play('start') }
-    Then { { message: [ "new", "game" ], 
+    Then { { message: const.new_game, 
              board: [ "1", "2", "3",
                       "4", "5", "6",
                       "7", "8", "9" ] } == subject }
   end
 
   context 'when play is called to exit the game' do
+    Given(:const) { GameConstants.new }
     Given(:board) { Board.new }
     Given(:rules) { Rules.new(board) }
     Given(:game_runner) { GameRunner.new(board, rules, "fake adapter") }
     When { 5.times do |i| game_runner.play(i) end }
     When(:subject) { game_runner.play('exit') }
-    Then { { message: [ "end", "game" ], 
+    Then { { message: const.end_game, 
              board: [ "X", "O", "X",
                       "O", "X", "6",
                       "7", "8", "9" ] } == subject }
@@ -71,23 +75,25 @@ describe 'GameRunner play' do
 
   context 'when play is called and the game is drawn' do
     Given(:drawn_game) { [ 4, 0, 8, 6, 3, 5, 7, 1, 2 ] }
+    Given(:const) { GameConstants.new }
     Given(:board) { Board.new }
     Given(:rules) { Rules.new(board) }
     Given(:game_runner) { GameRunner.new(board, rules, "fake adapter") }
     When { (0..7).each do |i| game_runner.play(drawn_game[i]) end }
     When(:subject) { game_runner.play(drawn_game[8]) }
-    Then { { message: [ "game", "draw" ], 
+    Then { { message: const.draw, 
              board: [ "O", "O", "X",
                       "X", "X", "O",
                       "O", "X", "X" ] } == subject }
   end
 
   context 'when an error is reported to play' do
+    Given(:const) { GameConstants.new }
     Given(:board) { Board.new }
     Given(:rules) { Rules.new(board) }
     Given(:game_runner) { GameRunner.new(board, rules, "fake adapter") }
     When(:subject) { game_runner.play('error') }
-    Then { { message: [ "bad", "move" ], 
+    Then { { message: const.bad_move, 
              board: [ "1", "2", "3",
                       "4", "5", "6",
                       "7", "8", "9" ] } == subject }
