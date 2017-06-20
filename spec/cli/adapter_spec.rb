@@ -19,9 +19,15 @@ describe 'Adapter render_board' do
 end
 
 describe 'Adapter relay' do
-  context 'when relay passes informat_messageion from the shell to the core' do
-    Given(:adapter) { Adapter.new() }
-    When(:subject) { adapter.relay("5") }
+  context 'when relay passes information from the shell to the core' do
+    Given(:const) { GameConstants.new }
+    Given(:status) { {board: ["1","2","3",
+                              "4","5","6",
+                              "7","8","9"], 
+                       message: const.new_game } }
+    Given(:adapter) { Adapter.new }
+    When(:subject) { adapter.push_status(status)
+                     adapter.relay("5") }
     Then { 4 == subject }  
   end
 
@@ -126,12 +132,13 @@ describe 'Adapter format_message' do
   end
 
   context 'when format_message is passed a draw message' do
+    Given(:style) { Style.new }
     Given(:const) { GameConstants.new }
     Given(:status) { { message: const.draw } }
     Given(:adapter) { Adapter.new }
     When(:subject) { adapter.push_status(status)
                      adapter.format_message }
-    Then { "The game is a draw." == subject }
+    Then { style.draw == subject }
   end
 
   context 'when format_message is passed a win message' do
@@ -151,20 +158,32 @@ describe 'Adapter format_message' do
   end
 
   context 'when format_message is passsed a message to start a new game' do
+    Given(:style) { Style.new }
     Given(:const) { GameConstants.new }
     Given(:status) { { message: const.new_game } }
     Given(:adapter) { Adapter.new }
     When(:subject) { adapter.push_status(status)
                      adapter.format_message }
-    Then { "new game" == subject }
+    Then { style.new_game == subject }
   end
 
   context 'when format_message is passsed a message to end the game' do
+    Given(:style) { Style.new }
     Given(:const) { GameConstants.new }
     Given(:status) { { message: const.end_game } }
     Given(:adapter) { Adapter.new }
     When(:subject) { adapter.push_status(status)
                      adapter.format_message }
-    Then { "Thanks for playing!" == subject }
+    Then { style.end_game == subject }
+  end
+
+  context 'when format_message is passed an error message' do
+    Given(:style) { Style.new }
+    Given(:const) { GameConstants.new }
+    Given(:status) { { message: const.bad_move } }
+    Given(:adapter) { Adapter.new }
+    When(:subject) { adapter.push_status(status)
+                     adapter.format_message }
+    Then { style.error == subject }
   end
 end

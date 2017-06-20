@@ -1,9 +1,12 @@
+require 'game_constants'
+
 class Validator
   attr_reader :error_message
 
   def initialize
-    @exit = "exit"
-    @start = "start"
+    @const = GameConstants.new
+    @exit = @const.exit
+    @start = @const.start
   end
 
   def command?(string)

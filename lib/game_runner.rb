@@ -1,5 +1,6 @@
-require 'cli/adapter'
 require 'game_constants'
+require 'cli/adapter'
+require 'ai/computer_player'
 
 class GameRunner
 
@@ -7,34 +8,47 @@ class GameRunner
     @const = GameConstants.new
     @board = board
     @rules = rules
-    @adapter = adapter
+
+    @human_interface = adapter
+    @hi = @human_interface
+    @hi.push_status(new_game)
+
+    @artificial_intelligence = ComputerPlayer.new
+    @ai = @artificial_intelligence
+    @ai.push_status(new_game)
+
     @playing = true
     @play_again = true
   end
 
+  def new_game
+    message_to_shell(@const.new_game)
+  end
+
+  def message_to_shell(message)
+    { message: message, 
+      board: @board.spaces }
+  end
+
   def start_game
     while @playing
-      @adapter.push_move(play(@adapter.pull_move))
+      @hi.push_move(play(@hi.pull_move))
     end
     play_again?
   end
 
-  def play_again?
-    if @play_again
-      @adapter.push_move(play_again)
-      execute_decision
-    end
-  end
-
-  def execute_decision
-    if @adapter.relay == @const.start
-      set_new_game
-      return start_game
-    end
-    @adapter.push_move(exit_command)
-  end
-
   def play(command)
+    if special_command(command)
+      return special_command(command)
+    end
+    play_report = @rules.mark(command)
+    if end_game?(play_report)
+      @playing = false
+    end
+    message_to_shell(play_report)
+  end
+
+  def special_command(command)
     if command == @const.start
       return set_new_game
     elsif command == @const.exit
@@ -42,11 +56,19 @@ class GameRunner
     elsif command == @const.error
       return error_message
     end
-    play_report = @rules.mark(command)
-    if end_game?(play_report)
-      @playing = false
-    end
-    message_to_shell(play_report)
+   false
+  end
+
+  def set_new_game
+    @playing = true
+    @rules.reset
+    new_game
+  end
+
+  def exit_command
+    @playing = false
+    @play_again = false
+    message_to_shell(@const.end_game)
   end
 
   def error_message
@@ -57,28 +79,22 @@ class GameRunner
     play_report[1] == @const.win || play_report == @const.draw
   end
 
-  def exit_command
-    @playing = false
-    @play_again = false
-    message_to_shell(@const.end_game)
+  def play_again?
+    if @play_again
+      @hi.push_move(play_again)
+      reset_game?
+    end
   end
 
   def play_again
     message_to_shell(@const.play_again)
   end
 
-  def set_new_game
-    @playing = true
-    @rules.reset
-    new_game
-  end
-
-  def new_game
-    message_to_shell(@const.new_game)
-  end
-
-  def message_to_shell(message)
-    { message: message, 
-      board: @board.spaces }
+  def reset_game?(answer = @hi.relay)
+    if answer == @const.start
+      set_new_game
+      return start_game
+    end
+    @hi.push_move(exit_command)
   end
 end

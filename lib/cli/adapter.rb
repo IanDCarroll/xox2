@@ -10,9 +10,8 @@ class Adapter
     @judge = Validator.new
     @style = Style.new
     @const = GameConstants.new
-    @status = { board: ["1","2","3","4","5","6","7","8","9"], 
-                message: @const.new_game }
-    @previous_board = ""
+    @status = {}
+    @previous_board = []
   end
 
   def pull_move
@@ -45,7 +44,7 @@ class Adapter
     if @judge.valid?(@status[:board], choice)
       return choice
     end
-    "error"
+    @const.error
   end
 
   def render_board
@@ -63,7 +62,7 @@ class Adapter
       return @style.new_game
     elsif @status[:message] == @const.end_game
       return @style.end_game
-    elsif @status[:message] == @const.error
+    elsif @status[:message] == @const.bad_move
       return @style.error
     elsif @status[:message] == @const.play_again
       return @style.play_again
