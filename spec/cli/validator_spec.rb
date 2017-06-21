@@ -1,3 +1,4 @@
+require 'spec_helper'
 require 'rspec-given'
 require 'cli/validator'
 require 'game_constants'

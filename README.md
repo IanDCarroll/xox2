@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/IanDCarroll/xox2.svg?branch=master)](https://travis-ci.org/IanDCarroll/xox2)
+[![Build Status](https://travis-ci.org/IanDCarroll/xox2.svg?branch=master)](https://travis-ci.org/IanDCarroll/xox2) [![Coverage Status](https://coveralls.io/repos/github/IanDCarroll/xox2/badge.svg?branch=master)](https://coveralls.io/github/IanDCarroll/xox2?branch=master)
 # xox2
 A PvP Noughts and Crosses Game
 

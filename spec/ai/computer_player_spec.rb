@@ -1,3 +1,4 @@
+require 'spec_helper'
 require 'rspec-given'
 require 'game_constants'
 require 'ai/computer_player'
