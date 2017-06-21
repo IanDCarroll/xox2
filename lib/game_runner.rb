@@ -19,6 +19,7 @@ class GameRunner
 
     @playing = true
     @play_again = true
+    @play_report = [ @const.players[1] ]
   end
 
   def new_game
@@ -32,20 +33,27 @@ class GameRunner
 
   def start_game
     while @playing
-      @hi.display_status(play(@hi.pull_move))
+      @hi.display_status(make_a_move)
     end
     play_again?
+  end
+
+  def make_a_move
+      if @play_report[0] != @const.players[0]
+        return play(@hi.pull_move)
+      end
+      play(@ai.pull_move)
   end
 
   def play(command)
     if special_command(command)
       return special_command(command)
     end
-    play_report = @rules.mark(command)
-    if end_game?(play_report)
+    @play_report = @rules.mark(command)
+    if end_game?(@play_report)
       @playing = false
     end
-    message_to_shell(play_report)
+    message_to_shell(@play_report)
   end
 
   def special_command(command)
@@ -61,6 +69,7 @@ class GameRunner
 
   def set_new_game
     @playing = true
+    @play_report = [ @const.players[1] ]
     @rules.reset
     new_game
   end
