@@ -9,11 +9,9 @@ class Rules
     @board = board
     @player = @const.players
     @current_player = @player[1]
-    @moves = 0
   end
 
   def mark(space)
-    @moves += 1
     swap_players
     @board.mark(@current_player, space)
     @reporter.report(status(space))
@@ -29,14 +27,11 @@ class Rules
   def status(space)
     { player: @current_player, 
       space: space, 
-      moves: @moves, 
-      size: @board.size, 
       board: @board.spaces }
   end
 
   def reset
     @board.paint_numbers_over_spaces
-    @moves = 0
     @current_player = @player[1]
   end
 end

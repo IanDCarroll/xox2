@@ -32,7 +32,7 @@ class GameRunner
 
   def start_game
     while @playing
-      @hi.push_move(play(@hi.pull_move))
+      @hi.display_status(play(@hi.pull_move))
     end
     play_again?
   end
@@ -81,7 +81,7 @@ class GameRunner
 
   def play_again?
     if @play_again
-      @hi.push_move(play_again)
+      @hi.display_status(play_again)
       reset_game?
     end
   end
@@ -95,6 +95,6 @@ class GameRunner
       set_new_game
       return start_game
     end
-    @hi.push_move(exit_command)
+    @hi.display_status(exit_command)
   end
 end

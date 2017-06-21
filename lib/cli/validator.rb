@@ -1,7 +1,6 @@
 require 'game_constants'
 
 class Validator
-  attr_reader :error_message
 
   def initialize
     @const = GameConstants.new
@@ -18,11 +17,16 @@ class Validator
     false
   end
 
-  def valid?(board, choice)
+  def valid?(board, raw_choice)
+    choice = input_to_i(raw_choice)
     if not_taken?(board, choice) && not_out_of_bounds?(board, choice)
       return choice
     end
-    false
+    @const.error
+  end
+
+  def input_to_i(choice)
+    choice.to_i - 1
   end
 
   def not_taken?(board, choice)

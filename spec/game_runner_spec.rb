@@ -132,7 +132,7 @@ describe 'GameRunner reset_game?' do
     Given(:adapter) { Adapter.new(MockShell.new) }
     Given(:game_runner) { GameRunner.new(board, rules, adapter) }
     When(:reset) { game_runner.reset_game?("not const.start") }
-    Then { " 1 | 2 | 3 \n---+---+---\n 4 | 5 | 6 \n---+---+---\n 7 | 8 | 9 " == reset }
+    Then { " 1 | 2 | 3 \n---+---+---\n 4 | 5 | 6 \n---+---+---\n 7 | 8 | 9 "== reset }
   end
 
   context 'when reset_game? is called to reset the game' do
@@ -162,7 +162,7 @@ describe 'GameRunner play_again?' do
     Given(:adapter) { Adapter.new(MockShell.new) }
     Given(:game_runner) { GameRunner.new(board, rules, adapter) }
     When(:play_again) { game_runner.play_again? }
-     Then { " 1 | 2 | 3 \n---+---+---\n 4 | 5 | 6 \n---+---+---\n 7 | 8 | 9 " == play_again }
+    Then { nil == play_again }
   end
 end
 

@@ -1,6 +1,5 @@
 class Board
   attr_reader :spaces
-  attr_reader :size
 
   def initialize(size = 9)
     @size = size

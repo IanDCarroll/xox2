@@ -1,6 +1,8 @@
 require 'cli/imperative_shell'
 require 'cli/validator'
 require 'cli/style'
+require 'cli/message_formatter'
+require 'cli/board_constructor'
 require 'game_constants'
 
 class Adapter
@@ -10,6 +12,8 @@ class Adapter
     @judge = Validator.new
     @style = Style.new
     @const = GameConstants.new
+    @message_formatter = MessageFormatter.new
+    @board_constructor = BoardConstructor.new
     @status = {}
     @previous_board = []
   end
@@ -19,83 +23,39 @@ class Adapter
     relay
   end
 
-  def push_move(message)
-    push_status(message)
-    display_message
-    display_board
-  end
-
-  def display_message
-    @shell.display(format_message)
-  end
-
   def display_board
     if render_board != @previous_board
+      @previous_board = render_board
       @shell.display(render_board)
     end
-    @previous_board = render_board
+  end
+
+  def render_board
+    @board_constructor.construct(@status[:board])
   end
 
   def relay(user_input = @shell.get_user_input)
     if @judge.command?(user_input)
       return user_input
     end
-    choice = input_to_i(user_input)
-    if @judge.valid?(@status[:board], choice)
-      return choice
-    end
-    @const.error
+    @judge.valid?(@status[:board], user_input)
   end
 
-  def render_board
-    rows = []
-    (0...board_size).step(3) do |i| rows << render_row(i) end
-    rows.join(@style.shelf)
-  end
-
-  def format_message
-    if @status[:message] == @const.draw
-      return @style.draw
-    elsif @status[:message][1] == @const.win
-      return format_win(@status[:message])
-    elsif @status[:message] == @const.new_game
-      return @style.new_game
-    elsif @status[:message] == @const.end_game
-      return @style.end_game
-    elsif @status[:message] == @const.bad_move
-      return @style.error
-    elsif @status[:message] == @const.play_again
-      return @style.play_again
-    end
-    format_move(@status[:message])
+  def display_status(message)
+    push_status(message)
+    display_message
+    display_board
   end
 
   def push_status(status)
     @status = status
   end
 
-private
-
-  def render_row(index)
-    row = @status[:board][index..index + 2].join(@style.wall)
-    padding = Array.new(2, @style.padding)
-    padding.join(row)
+  def display_message
+    @shell.display(format_message)
   end
 
-  def input_to_i(user_input)
-    user_input.to_i - 1
-  end
-
-  def board_size
-    @status[:board].length
-  end
-
-  def format_move(array)
-    array[1] += 1
-    array.join(@style.move)
-  end
-
-  def format_win(array)
-    array[0] + @style.win
+  def format_message
+    @message_formatter.format(@status[:message])
   end
 end

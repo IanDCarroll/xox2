@@ -34,8 +34,6 @@ describe "Rules reset" do
   context "when a played game is reset" do
     Given(:reset_game) { { player: "O",
                            space: "any value",
-                           moves: 0,
-                           size: 9,
                            board: [ "1", "2", "3",
                                     "4", "5", "6",
                                     "7", "8", "9" ] } }

@@ -34,14 +34,6 @@ describe 'Board mark' do
   end
 end
 
-describe 'Board size' do
-  context 'when board is nine squares' do
-    Given(:board) { Board.new }
-    When(:size) { board.size }
-    Then { 9 == size }
-  end
-end
-
 describe 'Board set_starting_board' do
   context 'when the board is set' do
     Given(:board) { Board.new }
