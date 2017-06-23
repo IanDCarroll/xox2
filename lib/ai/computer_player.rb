@@ -10,11 +10,9 @@ class ComputerPlayer
   end
 
   def choose_first_available_move
-    (0..@status[:board].length).each do |i|
+    @status[:board].length.times do |i|
       empty_space = i + 1 
-      if @status[:board][i] == empty_space.to_s
-        return i
-      end
+      if @status[:board][i] == (i + 1).to_s then return i end
     end
   end
 end
