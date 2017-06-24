@@ -27,13 +27,13 @@ describe 'Minimax choose' do
     Then { 3 == minimax }
   end
 
-#  context 'when choose is passed a board where the enemy is about to win' do
-#    Given(:board) { [ "O","X","X",
-#                      "4","O","6",
-#                      "7","8","X" ] }
-#    When(:minimax) { Minimax.new.choose(board) }
-#    Then { 6 == minimax }
-#  end
+  context 'when choose is passed a board where the enemy is about to win' do
+    Given(:board) { [ "O","X","X",
+                      "4","O","6",
+                      "7","8","X" ] }
+    When(:minimax) { Minimax.new.choose(board) }
+    Then { 5 == minimax }
+  end
 end
 
 describe 'Minimax available_spaces' do
@@ -57,18 +57,18 @@ describe 'Minimax available_spaces' do
     Then { [ 1, 3, 4, 7 ] == options }
   end
 end
-
-# may require deletion as the evaluation depth becomes deeper
-describe 'Minimax pick_the_best_choice' do
-  context 'if pick_the_best_choice finds no best choice' do
-    Given(:board) { [ "1","2","3",
-                      "4","5","6",
-                      "7","8","9" ] }
-    Given(:first_available_space) { 0 }
-    When(:minimax) { Minimax.new }
-    When(:choice) { minimax.choose(board) 
-                    minimax.pick_the_best_choice }
-    Then { first_available_space == choice }
-  end
-
-end
+#
+## may require deletion as the evaluation depth becomes deeper
+#describe 'Minimax pick_the_best_choice' do
+#  context 'if pick_the_best_choice finds no best choice' do
+#    Given(:board) { [ "1","2","3",
+#                      "4","5","6",
+#                      "7","8","9" ] }
+#    Given(:first_available_space) { 0 }
+#    When(:minimax) { Minimax.new }
+#    When(:choice) { minimax.choose(board) 
+#                    minimax.pick_the_best_choice }
+#    Then { first_available_space == choice }
+#  end
+#
+#end
