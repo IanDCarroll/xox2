@@ -7,69 +7,121 @@ class Minimax
   def initialize
     @const = GameConstants.new
     @judge = Reporter.new
+    @recursion_depth = 0
     @max_mark = @const.players[1]
-    @min_mark = @const.players[0]
+    @max_score = 1
     @choices = []
+    @legal_moves = []
   end
 
   def choose(board)
+    board = board.dup
     recurse_through_game_tree(board)
   end
 
   def recurse_through_game_tree(board)
-    evaluate_choices(board)
-    pick_the_best_choice
+    @recursion_depth += 1 # parallel recursions are making the count go wrong.
+    p 'recursion_depth ' + @recursion_depth.to_s
+    choices = evaluate_choices(board)
+    #p choices
+    choice = pick_the_best_choice(choices)
+    p 'surfacing from recursion_depth ' + @recursion_depth.to_s
+    @recursion_depth -= 1 # an attempt to undo parallel recusions
+    choice
   end
 
   def evaluate_choices(board)
     available_spaces(board).each do |space|
-      evaluate_choice(board, space)
+      evaluate_choice(board, space, @choices)
     end
+    @choices
   end
 
   def available_spaces(board = @board)
-    array = []
+    @legal_moves[@recursion_depth - 1] = []
+    scoped_legal_moves = @legal_moves[@recursion_depth -1]
     board.length.times do |i|
-      board[i] == (i + 1).to_s ? array << i : nil
+      board[i] == (i + 1).to_s ? scoped_legal_moves << i : nil
+      p "legal_moves " + @legal_moves.to_s
     end
-    array
+    p 'using legal_moves in index ' + (@recursion_depth -1).to_s
+    scoped_legal_moves
   end
 
-  def evaluate_choice(board, space)
-    if sim_report(board, space)[1] == @const.win
-      @choices[space] = 1 # needed max and min value toggling
-                          # why does this work without toggling?
-                          # is it because inside its own scope 
-                          # it always plays the hero? 
-                          # So it doesn't need to care about min or max?
+  def evaluate_choice(board, space, choices)
+    p 'original board ' + board.to_s
+    p 'modified_board ' + modified_board(board, space).to_s 
+    p 'evaluating space ' + space.to_s
+    p 'choices prior' + choices.to_s
+    p 'sim_report ' + sim_report(board, space).to_s
+    if sim_report(board, space) == [ @const.players[1], @const.win ]
+      choices[space] = @max_score
+      p 'choices O win' + choices.to_s
+    elsif sim_report(board, space) == [ @const.players[0], @const.win ]
+      choices[space] = -@max_score
+      p 'choices X win' + choices.to_s
     elsif sim_report(board, space) == @const.draw
-      @choices[space] = 0
+      choices[space] = 0
+      p 'choices drawn' + choices.to_s
     else
-      recurse_through_game_tree(sim_board(board, space)) 
+      p 'no endgame for space '+ space.to_s + '. recursing...'
+      recurse_through_game_tree(modified_board(board, space)) 
     end
   end
 
   def sim_report(board, space)
-    sim_board = board.dup
-    sim_board(sim_board, space)
-    @judge.report({ board: sim_board, 
-                    player: @max_mark,
+    @judge.report({ board: modified_board(board, space), 
+                    player: mark,
                     space: space })
   end
 
-  def sim_board(board, space)
-    board[space] = @max_mark
+  def mark
+    @recursion_depth % 2 == 1 ? @const.players[1] : @const.players[0]
+  end
+
+  def modified_board(board, space)
+    board = board.dup
+    board[space] = mark
     board
   end
 
-  def pick_the_best_choice
-    # should toggle back and forth between min & max depending on depth
-    # needed: depth variable for min and max, 
-    # but it looks like that's not necessary.
-    # why does @choices work? It shouldn't work since its on a global scope
-    @choices.each do |choice|
-      if choice == 1 then return @choices.index(choice) end
+  def pick_the_best_choice(choices)
+    if @recursion_depth % 2 == 1
+      pick_the_max_choice(choices)
+    elsif @recursion_depth % 2 == 0
+      pick_the_min_choice(choices)
     end
-    available_spaces[0]
+  end
+
+  def pick_the_min_choice(choices)
+    #p mark
+    best_score = @max_score
+    best_choice = nil 
+    choices.each do |choice|
+      unless choice == nil
+        if choice <= best_score
+          best_score = choice
+          best_choice = choices.index(choice) 
+        end
+      end
+    end
+    p 'enemy ' + @recursion_depth.to_s + " chooses " + best_choice.to_s
+    best_choice
+  end
+
+  def pick_the_max_choice(choices)
+    #p mark
+    best_score = -@max_score
+    best_choice = nil 
+    choices.each do |choice|
+      unless choice == nil
+        if choice >= best_score
+          best_score = choice
+          best_choice = choices.index(choice) 
+        end
+      end
+    end 
+    p 'selfy ' + @recursion_depth.to_s + " chooses " + best_choice.to_s
+    best_choice
   end
 end

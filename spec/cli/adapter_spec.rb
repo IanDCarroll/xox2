@@ -3,15 +3,11 @@ require 'rspec-given'
 require 'cli/adapter'
 require 'game_constants'
 
-describe 'Adapter init' do
-  Given(:status) { { board: Array.new, message: Array.new } }
-  Given(:subject) { Adapter.new }
-  Then { raise_error != subject } 
-end
-
 describe 'Adapter render_board' do
   context 'when render renders the first board' do
-    Given(:board) { [ "1", "2", "3", "4", "5", "6", "7", "8", "9" ] }
+    Given(:board) { [ nil,nil,nil,
+                      nil,nil,nil, 
+                      nil,nil,nil ] }
     Given(:status) { { board: board, message: ["new", "game"] } }
     Given(:adapter) { Adapter.new }
     Given { adapter.push_status(status) }
@@ -22,9 +18,9 @@ end
 describe 'Adapter relay' do
   context 'when relay passes information from the shell to the core' do
     Given(:const) { GameConstants.new }
-    Given(:status) { {board: ["1","2","3",
-                              "4","5","6",
-                              "7","8","9"], 
+    Given(:status) { {board: [nil,nil,nil,
+                              nil,nil,nil,
+                              nil,nil,nil], 
                        message: const.new_game } }
     Given(:adapter) { Adapter.new }
     When(:subject) { adapter.push_status(status)
@@ -33,9 +29,9 @@ describe 'Adapter relay' do
   end
 
   context 'when relay passes additional info from the shell to the core' do
-    Given(:status) { {board: ["1","2","3",
-                              "4","X","6",
-                              "7","8","9"], 
+    Given(:status) { {board: [nil,nil,nil,
+                              nil,"X",nil,
+                              nil,nil,nil], 
                        message: [ "X", 4 ]} }
     Given(:adapter) { Adapter.new }
     When(:subject) { adapter.push_status(status)
@@ -44,9 +40,9 @@ describe 'Adapter relay' do
   end
 
   context 'when relay passes a taken square from the shell to the core' do
-    Given(:status) { {board: ["1","2","3",
-                              "4","X","6",
-                              "7","8","9"], 
+    Given(:status) { {board: [nil,nil,nil,
+                              nil,"X",nil,
+                              nil,nil,nil], 
                        message: [ "X", 4 ]} }
     Given(:adapter) { Adapter.new }
     When(:subject) { adapter.push_status(status)
@@ -56,9 +52,9 @@ describe 'Adapter relay' do
 
 
   context 'when relay passes a number too high' do
-    Given(:status) { {board: ["1","2","3",
-                              "4","X","6",
-                              "7","8","9"], 
+    Given(:status) { {board: [nil,nil,nil,
+                              nil,"X",nil,
+                              nil,nil,nil], 
                        message: [ "X", 4 ]} }
     Given(:adapter) { Adapter.new }
     When(:subject) { adapter.push_status(status)
@@ -67,9 +63,9 @@ describe 'Adapter relay' do
   end
 
   context 'when relay passes a number too low' do
-    Given(:status) { {board: ["1","2","3",
-                              "4","X","6",
-                              "7","8","9"], 
+    Given(:status) { {board: [nil,nil,nil,
+                              nil,"X",nil,
+                              nil,nil,nil], 
                        message: [ "X", 4 ]} }
     Given(:adapter) { Adapter.new }
     When(:subject) { adapter.push_status(status)
@@ -79,9 +75,9 @@ describe 'Adapter relay' do
 
 
   context 'when relay passes a numberless string' do
-    Given(:status) { {board: ["1","2","3",
-                              "4","X","6",
-                              "7","8","9"], 
+    Given(:status) { {board: [nil,nil,nil,
+                              nil,"X",nil,
+                              nil,nil,nil], 
                        message: [ "X", 4 ]} }
     Given(:adapter) { Adapter.new }
     When(:subject) { adapter.push_status(status)
@@ -90,9 +86,9 @@ describe 'Adapter relay' do
   end
 
   context 'when relay passes the start keyword' do
-    Given(:status) { {board: ["1","2","3",
-                              "4","X","6",
-                              "7","8","9"], 
+    Given(:status) { {board: [nil,nil,nil,
+                              nil,"X",nil,
+                              nil,nil,nil], 
                        message: [ "X", 4 ]} }
     Given(:adapter) { Adapter.new }
     When(:subject) { adapter.push_status(status)
@@ -101,9 +97,9 @@ describe 'Adapter relay' do
   end
 
   context 'when relay passes the exit keyword' do
-    Given(:status) { {board: ["1","2","3",
-                              "4","X","6",
-                              "7","8","9"], 
+    Given(:status) { {board: [nil,nil,nil,
+                              nil,"X",nil,
+                              nil,"8",nil], 
                        message: [ "X", 4 ]} }
     Given(:adapter) { Adapter.new }
     When(:subject) { adapter.push_status(status)
@@ -114,9 +110,9 @@ end
 
 describe 'Adapter format_message' do
   context 'when format_message is passed a move message' do
-    Given(:status) { {board: ["1","2","3",
-                              "4","X","6",
-                              "7","8","9"], 
+    Given(:status) { {board: [nil,nil,nil,
+                              nil,"X",nil,
+                              nil,nil,nil], 
                        message: [ "X", 4 ]} }
     Given(:adapter) { Adapter.new }
     When(:subject) { adapter.push_status(status)

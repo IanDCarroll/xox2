@@ -2,55 +2,59 @@ require 'spec_helper'
 require 'rspec-given'
 require 'board'
 
-describe 'Board init' do
-  Given(:board) { Board.new }
-  Then { raise_error != board }
-end
-
 describe 'Board spaces' do
-  context 'when the board starts' do
+  context 'by default has 9 spaces' do
     Given(:board) { Board.new }
-    Then { [ "1", "2", "3", 
-             "4", "5", "6", 
-             "7", "8", "9" ] == board.spaces }
+    Then { [nil, nil, nil,
+            nil, nil, nil,
+            nil, nil, nil] == board.spaces }
   end
 end
 
 describe 'Board mark' do
-  context 'when player 1 makes a move' do
+  context 'when a mark is made' do
     Given(:board) { Board.new }
-    When { board.mark("X", 5) }
-    Then { [ "1", "2", "3",
-             "4", "5", "X",
-             "7", "8", "9" ] == board.spaces }
+    When { board.mark(5, "X") }
+    Then { [ nil, nil, nil,
+             nil, nil, "X",
+             nil, nil, nil ] == board.spaces }
   end
 
-  context 'when player 2 makes a move after player 1' do
+  context 'when 2 different marks are made' do
     Given(:board) { Board.new }
-    When { board.mark("X", 5) 
-           board.mark("O", 1) }
-    Then { [ "1", "O", "3",
-             "4", "5", "X",
-             "7", "8", "9" ] == board.spaces }
+    When { board.mark(5, "X")
+           board.mark(1, "O") }
+    Then { [ nil, "O", nil,
+             nil, nil, "X",
+             nil, nil, nil ] == board.spaces }
   end
 end
 
-describe 'Board set_starting_board' do
-  context 'when the board is set' do
+describe 'Board available spaces' do
+  context 'lists the spaces that are available to mark' do
     Given(:board) { Board.new }
-    When { board.paint_numbers_over_spaces }
-    Then { [ "1", "2", "3", 
-             "4", "5", "6", 
-             "7", "8", "9" ] == board.spaces }
+    Then { [0, 1, 2,
+            3, 4, 5,
+            6, 7, 8] == board.available_spaces }
   end
 
-  
-  context 'when the board is reset' do
+  context 'lists the spaces that are available to mark after the board has been marked somewhere' do
     Given(:board) { Board.new }
-    Given { 9.times do |i| board.mark("#", i) end }
-    When { board.paint_numbers_over_spaces }
-    Then { [ "1", "2", "3", 
-             "4", "5", "6", 
-             "7", "8", "9" ] == board.spaces }
+    When { board.mark(4, "J") }
+    Then { [0, 1, 2,
+            3,    5,
+            6, 7, 8] == board.available_spaces }
   end
+end
+
+
+describe 'Board erase_marks' do
+  context 'When board has been marked and a new game is started' do
+    Given(:board) { Board.new }
+    When { board.mark(4, "X") }
+    Then { [nil, nil, nil,
+            nil, nil, nil,
+            nil, nil, nil] == board.erase_marks }
+  end
+
 end

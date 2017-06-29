@@ -14,9 +14,9 @@ describe 'ComputerPlayer pull_move' do
   context 'when pull_move is called at the start' do
     Given(:const) { GameConstants.new }
     Given(:status) { { message: const.new_game,
-                       board: [ "1", "2", "3",
-                                "4", "5", "6",
-                                "7", "8", "9" ] } }
+                       board: [ nil, nil, nil,
+                                nil, nil, nil,
+                                nil, nil, nil ] } }
     Given(:computer) { ComputerPlayer.new }
     When(:pulled_move) { computer.push_status(status)
                          computer.pull_move }
@@ -28,9 +28,9 @@ describe 'ComputerPlayer push_status' do
   context 'when a new status is pushed to the computer' do
     Given(:const) { GameConstants.new }
     Given(:status) { { message: const.new_game,
-                       board: [ "1", "2", "3",
-                                "4", "5", "6",
-                                "7", "8", "9" ] } }
+                       board: [ nil, nil, nil,
+                                nil, nil, nil,
+                                nil, nil, nil ] } }
     Given(:computer) { ComputerPlayer.new }
     When(:pushed_status) { computer.push_status(status) }
     Then { computer.status = pushed_status }   

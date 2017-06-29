@@ -35,9 +35,9 @@ describe 'GameRunner play' do
     Given(:game_runner) { GameRunner.new(board, rules, adapter)}
     When(:subject) { game_runner.play(4) }
     Then { { message: [ "X", 4 ], 
-             board: [ "1", "2", "3",
-                      "4", "X", "6",
-                      "7", "8", "9" ] } == subject }
+             board: [ nil, nil, nil,
+                      nil, "X", nil,
+                      nil, nil, nil ] } == subject }
   end
 
   context 'when play is called on the second move' do
@@ -48,9 +48,9 @@ describe 'GameRunner play' do
     When(:subject) { game_runner.play(4)
                      game_runner.play(0) }
     Then { { message: [ "O", 0 ], 
-             board: [ "O", "2", "3",
-                      "4", "X", "6",
-                      "7", "8", "9" ] } == subject }
+             board: [ "O", nil, nil,
+                      nil, "X", nil,
+                      nil, nil, nil ] } == subject }
   end
 
   context 'when play is called to reset the game' do
@@ -62,9 +62,9 @@ describe 'GameRunner play' do
     When { 7.times do |i| game_runner.play(i) end }
     When(:subject) { game_runner.play('start') }
     Then { { message: const.new_game, 
-             board: [ "1", "2", "3",
-                      "4", "5", "6",
-                      "7", "8", "9" ] } == subject }
+             board: [ nil, nil, nil,
+                      nil, nil, nil,
+                      nil, nil, nil ] } == subject }
   end
 
   context 'when play is called to exit the game' do
@@ -77,8 +77,8 @@ describe 'GameRunner play' do
     When(:subject) { game_runner.play('exit') }
     Then { { message: const.end_game, 
              board: [ "X", "O", "X",
-                      "O", "X", "6",
-                      "7", "8", "9" ] } == subject }
+                      "O", "X", nil,
+                      nil, nil, nil ] } == subject }
   end
 
   context 'when play is called and the game is drawn' do
@@ -104,10 +104,9 @@ describe 'GameRunner play' do
     Given(:game_runner) { GameRunner.new(board, rules, adapter)}
     When(:subject) { game_runner.play('error') }
     Then { { message: const.bad_move, 
-             board: [ "1", "2", "3",
-                      "4", "5", "6",
-                      "7", "8", "9" ] } == subject }
-
+             board: [ nil, nil, nil,
+                      nil, nil, nil,
+                      nil, nil, nil ] } == subject }
   end
 end
 
@@ -120,22 +119,13 @@ describe 'GameRunner play_again' do
     Given(:game_runner) { GameRunner.new(board, rules, adapter)}
     When(:subject) { game_runner.play_again }
     Then { { message: const.play_again, 
-           board: [ "1", "2", "3",
-                    "4", "5", "6",
-                    "7", "8", "9" ] } == subject }
+           board: [ nil, nil, nil,
+                    nil, nil, nil,
+                    nil, nil, nil ] } == subject }
   end
 end
 
 describe 'GameRunner reset_game?' do
-  context 'when reset_game? is not called to reset the game' do
-    Given(:board) { Board.new }
-    Given(:rules) { Rules.new(board) }
-    Given(:adapter) { Adapter.new(MockShell.new) }
-    Given(:game_runner) { GameRunner.new(board, rules, adapter) }
-    When(:reset) { game_runner.reset_game?("not const.start") }
-    Then { " 1 | 2 | 3 \n---+---+---\n 4 | 5 | 6 \n---+---+---\n 7 | 8 | 9 "== reset }
-  end
-
   context 'when reset_game? is called to reset the game' do
     Given(:board) { Board.new }
     Given(:rules) { Rules.new(board) }
@@ -188,8 +178,8 @@ describe 'GameRunner make_a_move' do
                          game_runner.play(ai.pull_move) 
                          game_runner.make_a_move }
     Then{ { message: ["O", 1], 
-            board: ["X", "O", "3", 
-                    "4", "5", "6", 
-                    "7", "8", "9"] } == make_a_move } 
+            board: ["X", "O", nil, 
+                    nil, nil, nil, 
+                    nil, nil, nil] } == make_a_move } 
   end
 end

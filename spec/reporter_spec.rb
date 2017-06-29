@@ -12,9 +12,9 @@ end
 
 describe 'Reporter report' do
   context 'when reporter is informed of a change' do
-    Given(:board) { ["1","2","X",
-                     "4","5","6",
-                     "7","8","9"] }
+    Given(:board) { [nil,nil,"X",
+                     nil,nil,nil,
+                     nil,nil,nil] }
     Given(:status) { { player: "X", space: 2, moves: 1, size: 9, 
                        board: board } }
     Given(:subject) { Reporter.new }
@@ -23,9 +23,9 @@ describe 'Reporter report' do
   end
 
   context 'when reporter is informed of another change' do
-    Given(:board) { ["1","2","X",
-                     "4","O","6",
-                     "7","8","9"] }
+    Given(:board) { [nil,nil,"X",
+                     nil,"O",nil,
+                     nil,nil,nil] }
     Given(:status) { { player: "O", space: 4, moves: 2, size: 9, 
                       board: board} }
     When(:action) { subject.report(status) }
@@ -47,8 +47,8 @@ describe 'Reporter report' do
 
   context 'when reporter encounters a win in row 1' do
     Given(:board) { ["X","X","X",
-                     "O","5","6",
-                     "7","O","9"] }
+                     "O",nil,nil,
+                     nil,"O",nil] }
     Given(:status) { { player: "X", space: 8, moves: 5, size: 9, 
                        board: board} }
     Given(:subject) { Reporter.new }
@@ -57,9 +57,9 @@ describe 'Reporter report' do
   end
 
   context 'when reporter encounters a win in row 2' do
-    Given(:board) { ["1","O","3",
+    Given(:board) { [nil,"O",nil,
                      "X","X","X",
-                     "7","O","9"] }
+                     nil,"O",nil] }
     Given(:status) { { player: "X", space: 8, moves: 5, size: 9, 
                        board: board} }
     Given(:subject) { Reporter.new }
@@ -68,9 +68,9 @@ describe 'Reporter report' do
   end
 
   context 'when reporter encounters a different player win' do
-    Given(:board) { ["1","X","X",
+    Given(:board) { [nil,"X","X",
                      "O","O","O",
-                     "7","X","9"] }
+                     nil,"X",nil] }
     Given(:status) { { player: "O", space: 8, moves: 6, size: 9, 
                        board: board} }
     Given(:subject) { Reporter.new }
@@ -79,8 +79,8 @@ describe 'Reporter report' do
   end
 
   context 'when reporter encounters a win in row 3' do
-    Given(:board) { ["O","O","3",
-                     "4","5","6",
+    Given(:board) { ["O","O",nil,
+                     nil,nil,nil,
                      "X","X","X"] }
     Given(:status) { { player: "X", space: 8, moves: 5, size: 9, 
                        board: board} }
@@ -90,8 +90,8 @@ describe 'Reporter report' do
   end
 
   context 'when reporter encounters a win in column 1' do
-    Given(:board) { ["X","2","3",
-                     "X","5","6",
+    Given(:board) { ["X",nil,nil,
+                     "X",nil,nil,
                      "X","O","O"] }
     Given(:status) { { player: "X", space: 8, moves: 5, size: 9, 
                        board: board} }
@@ -101,9 +101,9 @@ describe 'Reporter report' do
   end
 
   context 'when reporter encounters a win in column 2' do
-    Given(:board) { ["1","X","3",
+    Given(:board) { [nil,"X",nil,
                      "O","X","O",
-                     "7","X","9"] }
+                     nil,"X",nil] }
     Given(:status) { { player: "X", space: 8, moves: 5, size: 9, 
                        board: board} }
     Given(:subject) { Reporter.new }
@@ -112,9 +112,9 @@ describe 'Reporter report' do
   end
 
   context 'when reporter encounters a win in column 3' do
-    Given(:board) { ["1","O","X",
-                     "4","5","X",
-                     "O","8","X"] }
+    Given(:board) { [nil,"O","X",
+                     nil,nil,"X",
+                     "O",nil,"X"] }
     Given(:status) { { player: "X", space: 8, moves: 5, size: 9, 
                        board: board} }
     Given(:subject) { Reporter.new }
@@ -124,8 +124,8 @@ describe 'Reporter report' do
 
   context 'when reporter encounters a win in dexter diagonal' do
     Given(:board) { ["X","O","X",
-                     "4","X","O",
-                     "O","8","X"] }
+                     nil,"X","O",
+                     "O",nil,"X"] }
     Given(:status) { { player: "X", space: 8, moves: 7, size: 9, 
                        board: board} }
     Given(:subject) { Reporter.new }
@@ -135,8 +135,8 @@ describe 'Reporter report' do
 
   context 'when reporter encounters a win in sinister diagonal' do
     Given(:board) { ["X","O","X",
-                     "O","X","6",
-                     "X","8","O"] }
+                     "O","X",nil,
+                     "X",nil,"O"] }
     Given(:status) { { player: "X", space: 8, moves: 7, size: 9, 
                        board: board} }
     Given(:subject) { Reporter.new }

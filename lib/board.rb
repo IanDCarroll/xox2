@@ -4,14 +4,19 @@ class Board
   def initialize(size = 9)
     @size = size
     @spaces = Array.new(size)
-    paint_numbers_over_spaces
   end
 
-  def mark(player_mark, space)
+  def mark(space, player_mark)
     @spaces[space] = player_mark
   end
 
-  def paint_numbers_over_spaces
-    (0..@size).each do |i| @spaces[i - 1] = i.to_s  end
+  def available_spaces
+    spaces.map.with_index do |space, ndx|
+      ndx if space.nil?
+    end.compact
+  end
+
+  def erase_marks
+    @spaces = Array.new(@size)
   end
 end
