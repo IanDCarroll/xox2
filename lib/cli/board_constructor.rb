@@ -7,7 +7,7 @@ class BoardConstructor
   end
 
   def construct(board)
-    @board = board
+    @board = board.dup
     paint_numbers_over_empty_spaces
     rows = []
     (0...size).step(square) do |i| rows << construct_row(i) end
