@@ -11,6 +11,13 @@ describe 'Board spaces' do
   end
 end
 
+describe 'Board size' do
+  context 'by default is size 9' do
+    Given(:board) { Board.new }
+    Then { 9 == board.size }
+  end
+end
+
 describe 'Board mark' do
   context 'when a mark is made' do
     Given(:board) { Board.new }
@@ -48,13 +55,12 @@ describe 'Board available spaces' do
 end
 
 
-describe 'Board erase_marks' do
+describe 'Board reset_marks' do
   context 'When board has been marked and a new game is started' do
     Given(:board) { Board.new }
     When { board.mark(4, "X") }
     Then { [nil, nil, nil,
             nil, nil, nil,
-            nil, nil, nil] == board.erase_marks }
+            nil, nil, nil] == board.reset_marks }
   end
-
 end

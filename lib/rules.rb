@@ -31,7 +31,7 @@ class Rules
   end
 
   def reset
-    @board.erase_marks
+    @board.reset_marks
     @current_player = @player[1]
   end
 end

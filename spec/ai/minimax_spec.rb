@@ -1,138 +1,157 @@
 require 'spec_helper'
 require 'rspec-given'
 require 'ai/minimax'
+require 'board'
 
-describe 'Minimax init' do
-  context 'when Minimax initializes' do
-    Given(:minimax) { Minimax.new }
-    Then { raise_error != minimax }
+
+describe 'Minimax board functions' do
+  context 'when a new board is passed to Minimax' do
+    Given(:board) { Board.new }
+    When(:minimax) { Minimax.new(board) }
+    Then { Array.new(9) == minimax.spaces }
+  end
+
+  context 'when a new board passed to Minimax is updated' do
+    Given(:board) { Board.new }
+    When(:minimax) { Minimax.new(board) }
+    When { board.mark(4,"X")}
+    Then { [nil,nil,nil,
+            nil,"X",nil,
+            nil,nil,nil] == minimax.spaces }
   end
 end
-
-describe 'Minimax choose' do
-  context 'when 7 is the only square left' do
-    Given(:board) { [ "O","O","X",
-                      "X","X","O",
-                      "O","8","X" ] }
-    When(:minimax) { Minimax.new }
-    When(:choice) { minimax.choose(board) }
-    Then { 7 == choice }
-  end
-
-  context 'when 3 is the only square left' do
-    Given(:board) { [ "O","X","O",
-                      "4","X","O",
-                      "X","O","X" ] }
-    When(:minimax) { Minimax.new }
-    When(:choice) { minimax.choose(board) }
-    Then { 3 == choice }
-  end
-
-  context 'when 1 is the only square left' do
-    Given(:board) { [ "X","2","O",
-                      "O","X","X",
-                      "X","O","O" ] }
-    When(:minimax) { Minimax.new }
-    When(:choice) { minimax.choose(board) }
-    Then { 1 == choice }
-  end
-
-  context 'when 5 is the only square left' do
-    Given(:board) { [ "X","O","X",
-                      "O","X","6",
-                      "O","X","O" ] }
-    When(:minimax) { Minimax.new }
-    When(:choice) { minimax.choose(board) }
-    Then { 5 == choice }
-  end
-
-  context 'when 4 is the only square left' do
-    Given(:board) { [ "X","O","X",
-                      "O","5","O",
-                      "X","O","X" ] }
-    When(:minimax) { Minimax.new }
-    When(:choice) { minimax.choose(board) }
-    Then { 4 == choice }
-  end
-
-  context 'when 0 is the only square left' do
-    Given(:board) { [ "1","O","O",
-                      "X","X","O",
-                      "X","O","X" ] }
-    When(:minimax) { Minimax.new }
-    When(:choice) { minimax.choose(board) }
-    Then { 0 == choice }
-  end
-
-  context 'when 2 is the only square left' do
-    Given(:board) { [ "X","X","3",
-                      "O","X","O",
-                      "X","O","O" ] }
-    When(:minimax) { Minimax.new }
-    When(:choice) { minimax.choose(board) }
-    Then { 2 == choice }
-  end
-
-  context 'when 8 is the only square left' do
-    Given(:board) { [ "X","O","X",
-                      "O","X","X",
-                      "O","O","9" ] }
-    When(:minimax) { Minimax.new }
-    When(:choice) { minimax.choose(board) }
-    Then { 8 == choice }
-  end
-
-  context 'when 6 is the only square left' do
-    Given(:board) { [ "O","O","X",
-                      "O","X","O",
-                      "7","X","X" ] }
-    When(:minimax) { Minimax.new }
-    When(:choice) { minimax.choose(board) }
-    Then { 6 == choice }
-  end
-
-  context 'when one of two squares left will win the game' do
-    Given(:board) { [ "O","X","3",
-                      "O","X","X",
-                      "7","O","X" ] }
-    When(:minimax) { Minimax.new }
-    When(:choice) { minimax.choose(board) }
-    Then { 6 == choice }
-  end
-
-#  context 'when another one of two squares left will win the game' do
-#    Given(:board) { [ "1","O","O",
-#                      "O","X","X",
-#                      "X","X","9" ] }
-#    When(:minimax) { Minimax.new }
-#    When(:choice) { minimax.choose(board) }
-#    Then { 0 == choice }
+#describe 'Minimax available_moves' do
+#  context 'when available moves scans an enpty board' do
+#    Given(:) {}
+#    When(:) {}
+#    Then {}
 #  end
-#
-#  context 'when one of three squares left will lose the game' do
-#    Given(:board) { [ "O","X","X",
-#                      "4","O","6",
-#                      "7","8","X" ] }
-#    When(:minimax) { Minimax.new }
-#    When(:choice) { minimax.choose(board) }
-#    Then { 5 == choice }
-#  end
-#
-#  context 'when another one of three squares left will lose the game' do
-#    Given(:board) { [ "1","2","O",
-#                      "4","O","X",
-#                      "X","8","X" ] }
+#end
+
+#describe 'Minimax choose' do
+#  context 'when 7 is the only square left' do
+#    Given(:board) { [ "O","O","X",
+#                      "X","X","O",
+#                      "O",nil,"X" ] }
 #    When(:minimax) { Minimax.new }
 #    When(:choice) { minimax.choose(board) }
 #    Then { 7 == choice }
 #  end
 #
-#  context 'when one of four squares left will win the game' do
-#    Given(:board) { [ "O","2","X",
-#                      "4","X","6",
-#                      "O","8","X" ] }
+#  context 'when 3 is the only square left' do
+#    Given(:board) { [ "O","X","O",
+#                      nil,"X","O",
+#                      "X","O","X" ] }
 #    When(:minimax) { Minimax.new }
 #    When(:choice) { minimax.choose(board) }
 #    Then { 3 == choice }
 #  end
-end
+#
+#  context 'when 1 is the only square left' do
+#    Given(:board) { [ "X",nil,"O",
+#                      "O","X","X",
+#                      "X","O","O" ] }
+#    When(:minimax) { Minimax.new }
+#    When(:choice) { minimax.choose(board) }
+#    Then { 1 == choice }
+#  end
+#
+#  context 'when 5 is the only square left' do
+#    Given(:board) { [ "X","O","X",
+#                      "O","X",nil,
+#                      "O","X","O" ] }
+#    When(:minimax) { Minimax.new }
+#    When(:choice) { minimax.choose(board) }
+#    Then { 5 == choice }
+#  end
+#
+#  context 'when 4 is the only square left' do
+#    Given(:board) { [ "X","O","X",
+#                      "O",nil,"O",
+#                      "X","O","X" ] }
+#    When(:minimax) { Minimax.new }
+#    When(:choice) { minimax.choose(board) }
+#    Then { 4 == choice }
+#  end
+#
+#  context 'when 0 is the only square left' do
+#    Given(:board) { [ nil,"O","O",
+#                      "X","X","O",
+#                      "X","O","X" ] }
+#    When(:minimax) { Minimax.new }
+#    When(:choice) { minimax.choose(board) }
+#    Then { 0 == choice }
+#  end
+#
+#  context 'when 2 is the only square left' do
+#    Given(:board) { [ "X","X",nil,
+#                      "O","X","O",
+#                      "X","O","O" ] }
+#    When(:minimax) { Minimax.new }
+#    When(:choice) { minimax.choose(board) }
+#    Then { 2 == choice }
+#  end
+#
+#  context 'when 8 is the only square left' do
+#    Given(:board) { [ "X","O","X",
+#                      "O","X","X",
+#                      "O","O",nil ] }
+#    When(:minimax) { Minimax.new }
+#    When(:choice) { minimax.choose(board) }
+#    Then { 8 == choice }
+#  end
+#
+#  context 'when 6 is the only square left' do
+#    Given(:board) { [ "O","O","X",
+#                      "O","X","O",
+#                      nil,"X","X" ] }
+#    When(:minimax) { Minimax.new }
+#    When(:choice) { minimax.choose(board) }
+#    Then { 6 == choice }
+#  end
+#
+#  context 'when one of two squares left will win the game' do
+#    Given(:board) { [ "O","X",nil,
+#                      "O","X","X",
+#                      nil,"O","X" ] }
+#    When(:minimax) { Minimax.new }
+#    When(:choice) { minimax.choose(board) }
+#    Then { 6 == choice }
+#  end
+#
+#  context 'when another one of two squares left will win the game' do
+#    Given(:board) { [ nil,"O","O",
+#                      "O","X","X",
+#                      "X","X",nil ] }
+#    When(:minimax) { Minimax.new }
+#    When(:choice) { minimax.choose(board) }
+#    Then { 0 == choice }
+#  end
+#
+#  context 'when one of four squares left will lose the game' do
+#    Given(:board) { [ "O","X","X",
+#                      nil,"O",nil,
+#                      nil,nil,"X" ] }
+#    When(:minimax) { Minimax.new }
+#    When(:choice) { minimax.choose(board) }
+#    Then { 5 == choice }
+#  end
+#
+#  context 'when another one of four squares left will lose the game' do
+#    Given(:board) { [ nil,nil,"O",
+#                      nil,"O","X",
+#                      "X",nil,"X" ] }
+#    When(:minimax) { Minimax.new }
+#    When(:choice) { minimax.choose(board) }
+#    Then { 7 == choice }
+#  end
+#
+#  context 'when one of five squares left will win the game' do
+#    Given(:board) { [ "O",nil,"X",
+#                      nil,"X",nil,
+#                      "O",nil,"X" ] }
+#    When(:minimax) { Minimax.new }
+#    When(:choice) { minimax.choose(board) }
+#    Then { 3 == choice }
+#  end
+#end

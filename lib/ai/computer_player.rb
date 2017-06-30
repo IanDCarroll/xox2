@@ -1,21 +1,18 @@
 require 'ai/minimax'
 
 class ComputerPlayer
-  attr_accessor :status
 
-  def push_status(status)
-    @status = status
-    @ai = Minimax.new
+  def initialize(board)
+    @board = board
+    @ai = Minimax.new(board)
   end
 
   def pull_move
-    # @ai.choose(@status[:board]) # for when it works again
+    #@ai.choose # for when it works again
     choose_first_available_move
   end
 
   def choose_first_available_move
-    @status[:board].length.times do |i|
-      if @status[:board][i] == nil then return i end
-    end
+    @board.available_spaces[0]
   end
 end

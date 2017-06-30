@@ -17,7 +17,6 @@ class BoardConstructor
   def paint_numbers_over_empty_spaces
     @board.each_index { |space|
       if @board[space].nil? then @board[space] = (space + 1).to_s end }
-    p @board
   end
 
   def size

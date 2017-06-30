@@ -1,5 +1,6 @@
 class Board
   attr_reader :spaces
+  attr_reader :size
 
   def initialize(size = 9)
     @size = size
@@ -16,7 +17,7 @@ class Board
     end.compact
   end
 
-  def erase_marks
+  def reset_marks
     @spaces = Array.new(@size)
   end
 end

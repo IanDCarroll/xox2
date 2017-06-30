@@ -13,9 +13,8 @@ class GameRunner
     @hi = @human_interface
     @hi.push_status(new_game)
 
-    @artificial_intelligence = ComputerPlayer.new
+    @artificial_intelligence = ComputerPlayer.new(@board)
     @ai = @artificial_intelligence
-    @ai.push_status(new_game)
 
     @playing = true
     @play_again = true

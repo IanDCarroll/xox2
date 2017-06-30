@@ -172,10 +172,9 @@ describe 'GameRunner make_a_move' do
   context 'when the AI goes second' do
     Given(:board) { Board.new }
     Given(:adapter) { Adapter.new(MockShell.new) }
-    Given(:ai) { ComputerPlayer.new }
+    Given(:ai) { ComputerPlayer.new(board) }
     Given(:game_runner) { GameRunner.new(board, Rules.new(board), adapter) }
-    When(:make_a_move) { ai.push_status(game_runner.new_game)
-                         game_runner.play(ai.pull_move) 
+    When(:make_a_move) { game_runner.play(ai.pull_move) 
                          game_runner.make_a_move }
     Then{ { message: ["O", 1], 
             board: ["X", "O", nil, 
