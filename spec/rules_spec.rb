@@ -33,8 +33,7 @@ end
 
 describe "Rules reset" do
   context "when a played game is reset" do
-    Given(:reset_game) { { player: "O",
-                           space: "any value",
+    Given(:reset_game) { { space: "any value",
                            board: [ nil, nil, nil,
                                     nil, nil, nil,
                                     nil, nil, nil ] } }

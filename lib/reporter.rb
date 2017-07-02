@@ -8,7 +8,7 @@ class Reporter
 
   def report(status)
     if win?(status[:board])
-      return @const.winner(status[:player])
+      return @const.winner(status[:board][status[:space]])
     elsif not empty_spaces?(status[:board])
       return @const.draw
     end
@@ -16,7 +16,7 @@ class Reporter
   end
 
   def report_move(status)
-    [ status[:player], status[:space] ]
+    [ status[:board][status[:space]], status[:space] ]
   end
 
   def win?(board)

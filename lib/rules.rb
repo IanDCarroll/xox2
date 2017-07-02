@@ -25,8 +25,7 @@ class Rules
   end
 
   def status(space)
-    { player: @current_player, 
-      space: space, 
+    { space: space, 
       board: @board.spaces }
   end
 
