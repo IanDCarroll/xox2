@@ -31,12 +31,15 @@ class Reporter
   def winning_set?(board, winning_set)
     win = []
     winning_set.each { |space| win << board[space] }
-    unless win.uniq == [nil] then win.uniq.length == 1 end
+    unless win.uniq[0].nil? || win.uniq[0].instance_of?(Integer) 
+      win.uniq.length == 1
+    end
   end
 
   def empty_spaces?(board)
     (0...board.length).each { |i|
-      if board[i] == nil
+      if board[i].nil? || board[i].instance_of?(Integer)
+
         return true
       end }
     false

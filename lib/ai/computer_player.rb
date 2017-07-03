@@ -3,7 +3,7 @@ require 'ai/minimax'
 class ComputerPlayer
 
   def initialize(board)
-    @board = board.dup
+    @board = board
     @ai = Minimax.new(@board)
   end
 

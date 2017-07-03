@@ -33,6 +33,29 @@ describe 'Reporter report' do
     Then { ["O", 4] == action }
   end
 
+  context 'when reporter ignores integers for wins' do
+    Given(:board) { [ 1 ,nil,"X",
+                      1 ,"O",nil,
+                      1 ,nil,nil] }
+    Given(:status) { { space: 4, 
+                       board: board} }
+    When(:action) { subject.report(status) }
+    Given(:subject) { Reporter.new }
+    Then { ["O", 4] == action }
+  end
+
+  context 'when reporter ignores integers for draws' do
+    Given(:board) { [ 1 , 1 ,"X",
+                      1 ,"O", 1 ,
+                      1 , 1 , 1 ] }
+    Given(:status) { { space: 4, 
+                       board: board} }
+    When(:action) { subject.report(status) }
+    Given(:subject) { Reporter.new }
+    Then { ["O", 4] == action }
+  end
+
+
   context 'when reporter encounters a full board' do
     Given(:const) { GameConstants.new }
     Given(:board) { ["O","X","O",
