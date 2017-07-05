@@ -93,13 +93,71 @@ describe 'Minimax appropriate_player' do
 end
 
 describe "Minimax optimum_choice" do
-  context 'when the method can be called' do
+  context 'when the board is drawn' do
     Given(:board) { Board.new }
     Given(:minimax) { Minimax.new(board) }
-    When { 
-           board.mark(0, "X")
- } 
-    Then { nil == minimax.optimum_choice }
+    When { board.mark(8, "X")
+           board.mark(0, "O")
+           board.mark(1, "X")
+           board.mark(2, "O")
+           board.mark(4, "X")
+           board.mark(3, "O")
+           board.mark(5, "X")
+           board.mark(7, "O")
+           board.mark(6, "X") } 
+    Then { 0 == minimax.optimum_choice }
+  end
+
+  context 'when the board is lost at the last move' do
+    Given(:board) { Board.new }
+    Given(:minimax) { Minimax.new(board) }
+    When { board.mark(1, "X")
+           board.mark(4, "O")
+           board.mark(2, "X")
+           board.mark(5, "O")
+           board.mark(3, "X")
+           board.mark(7, "O")
+           board.mark(6, "X")
+           board.mark(8, "O")
+           board.mark(0, "X") } 
+    Then { -1 == minimax.optimum_choice }
+  end
+
+  context 'when the board is lost early' do
+    Given(:board) { Board.new }
+    Given(:minimax) { Minimax.new(board) }
+    When { board.mark(0, "X")
+           board.mark(8, "O")
+           board.mark(1, "X")
+           board.mark(7, "O")
+           board.mark(2, "X") } 
+    Then { -1 == minimax.optimum_choice }
+  end
+
+   context 'when the board is won early' do
+    Given(:board) { Board.new }
+    Given(:minimax) { Minimax.new(board) }
+    When { board.mark(0, "X")
+           board.mark(8, "O")
+           board.mark(1, "X")
+           board.mark(7, "O")
+           board.mark(4, "X") 
+           board.mark(6, "O") }
+    Then { 1 == minimax.optimum_choice }
+  end 
+
+  context 'when there is only one move left' do
+    Given(:board) { Board.new }
+    Given(:minimax) { Minimax.new(board) }
+    When { board.mark(8, "X")
+           board.mark(0, "O")
+           board.mark(1, "X")
+           board.mark(2, "O")
+           board.mark(4, "X")
+           board.mark(3, "O")
+           board.mark(5, "X")
+           board.mark(7, "O") } 
+    Then { 6 == minimax.optimum_choice }
   end
 end
 

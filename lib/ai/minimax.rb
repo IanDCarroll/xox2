@@ -18,8 +18,14 @@ class Minimax
   end
 
   def optimum_choice(spaces = @spaces, depth = @depth, choices = {})
-      p @judge.report({board: spaces})
-      if @judge.report({board: spaces}) == @const.draw then return 0 end
+    report = @judge.report({board: spaces})
+    if report == @const.draw then return 0 
+    elsif report == @const.winner(@const.players[0]) then return -1
+    elsif report == @const.winner(@const.players[1]) then return 1 end
+
+    @board.available_spaces.each { |space| choices = space }
+    choices
+
   end
 
   def available_spaces
