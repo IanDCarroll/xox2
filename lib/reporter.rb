@@ -7,8 +7,9 @@ class Reporter
   end
 
   def report(status)
-    if win?(status[:board])
-      return @const.winner(status[:board][status[:space]])
+    winning_player = check_for_win(status[:board])
+    if winning_player
+      return @const.winner(winning_player)
     elsif not empty_spaces?(status[:board])
       return @const.draw
     end
@@ -16,23 +17,24 @@ class Reporter
   end
 
   def report_move(status)
+    if status[:space].nil? then return nil end
     [ status[:board][status[:space]], status[:space] ]
   end
 
-  def win?(board)
+  def check_for_win(board)
     @const.winning_sets.each do |winning_set|
-      if winning_set?(board, winning_set)
-        return true
-      end
+      winning_mark = winning_set(board, winning_set)
+      if winning_mark then return winning_mark end
     end
     false
   end
 
-  def winning_set?(board, winning_set)
+  def winning_set(board, winning_set)
     win = []
     winning_set.each { |space| win << board[space] }
     unless win.uniq[0].nil? || win.uniq[0].instance_of?(Integer) 
-      win.uniq.length == 1
+      if win.uniq.length == 1
+        return win.uniq.first end
     end
   end
 

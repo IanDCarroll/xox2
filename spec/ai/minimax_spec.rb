@@ -55,45 +55,53 @@ end
 
 
 
-describe 'Minimax recursion_counter' do
-  context 'when recursion_counter has not been called' do
+describe 'Minimax depth' do
+  context 'when depth has not been called' do
     Given(:minimax) { Minimax.new(Board.new) }
-    Then { 0 == minimax.recursion_depth }
+    Then { 0 == minimax.depth }
   end
 
   context 'when called to track a deeper recursion' do
     Given(:minimax) { Minimax.new(Board.new) }
-    When { minimax.recursion_depth += 1 }
-    Then { 1 == minimax.recursion_depth }
+    When { minimax.depth += 1 }
+    Then { 1 == minimax.depth }
   end
 
   context 'when called to track a surfacing recursion' do
     Given(:minimax) { Minimax.new(Board.new) }
-    When { minimax.recursion_depth += 1
-           minimax.recursion_depth -= 1 }
-    Then { 0 == minimax.recursion_depth }
+    Given { minimax.depth += 1 }
+    When { minimax.depth -= 1 }
+    Then { 0 == minimax.depth }
   end
 end
 
 describe 'Minimax appropriate_player' do
-  context 'when recursion_depth is at the root level' do
+  context 'when depth is at the root level' do
     Given(:const) { GameConstants.new }
     Given(:minimax) { Minimax.new(Board.new) }
-    When { minimax.recursion_depth += 1 }
+    When { minimax.depth += 1 }
     Then { const.players[1] = minimax.appropriate_player }
   end
 
   context 'when recurstion_depth is an even number' do
     Given(:const) { GameConstants.new }
     Given(:minimax) { Minimax.new(Board.new) }
-    When { minimax.recursion_depth += 1 
-           minimax.recursion_depth += 1 }
+    When { minimax.depth += 1 
+           minimax.depth += 1 }
     Then { const.players[0] = minimax.appropriate_player }
   end
 end
 
-
-
+describe "Minimax optimum_choice" do
+  context 'when the method can be called' do
+    Given(:board) { Board.new }
+    Given(:minimax) { Minimax.new(board) }
+    When { 
+           board.mark(0, "X")
+ } 
+    Then { nil == minimax.optimum_choice }
+  end
+end
 
 #describe 'Minimax choose' do
 #  context 'when 7 is the only square left' do
