@@ -25,7 +25,6 @@ class Minimax
 
     @board.available_spaces.each { |space| choices = space }
     choices
-
   end
 
   def available_spaces
@@ -33,6 +32,6 @@ class Minimax
   end
 
   def appropriate_player
-    @depth.odd? ? @const.players[1] : @const.players[0]
+    @depth.odd? ? @const.players[0] : @const.players[1]
   end
 end

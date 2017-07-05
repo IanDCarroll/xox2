@@ -79,16 +79,14 @@ describe 'Minimax appropriate_player' do
   context 'when depth is at the root level' do
     Given(:const) { GameConstants.new }
     Given(:minimax) { Minimax.new(Board.new) }
-    When { minimax.depth += 1 }
-    Then { const.players[1] = minimax.appropriate_player }
+    Then { const.players[1] == minimax.appropriate_player }
   end
 
-  context 'when recurstion_depth is an even number' do
+  context 'when depth is an odd number' do
     Given(:const) { GameConstants.new }
     Given(:minimax) { Minimax.new(Board.new) }
-    When { minimax.depth += 1 
-           minimax.depth += 1 }
-    Then { const.players[0] = minimax.appropriate_player }
+    When { minimax.depth += 1 }
+    Then { const.players[0] == minimax.appropriate_player }
   end
 end
 
