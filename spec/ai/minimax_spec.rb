@@ -22,72 +22,28 @@ describe 'Minimax board' do
   end
 end
 
-describe 'Minimax available_spaces' do
-  context 'when minimax needs a list of optional moves' do
-    Given(:minimax) { Minimax.new(Board.new) }
-    Then { [0,1,2,3,4,5,6,7,8] == minimax.available_spaces }
-  end
-
-  context 'when the list of available spaces is from a used board' do
-    Given(:board) { Board.new }
-    Given(:minimax) { Minimax.new(board) }
-    When { board.mark(0, "X")
-           board.mark(2, "X")
-           board.mark(4, "X")
-           board.mark(6, "O")
-           board.mark(8, "O") }
-    Then { [1,3,5,7] == minimax.available_spaces }
-  end
-
-   context 'when the list takes integers as not available from a used board' do
-    Given(:board) { Board.new }
-    Given(:minimax) { Minimax.new(board) }
-    When { board.mark(0, 1)
-           board.mark(2, 1)
-           board.mark(4, 1)
-           board.mark(6, 1)
-           board.mark(8, 1) }
-    Then { [1,3,5,7] == minimax.available_spaces }
-  end
-end
-
-
-
-
-
-describe 'Minimax depth' do
-  context 'when depth has not been called' do
-    Given(:minimax) { Minimax.new(Board.new) }
-    Then { 0 == minimax.depth }
-  end
-
-  context 'when called to track a deeper recursion' do
-    Given(:minimax) { Minimax.new(Board.new) }
-    When { minimax.depth += 1 }
-    Then { 1 == minimax.depth }
-  end
-
-  context 'when called to track a surfacing recursion' do
-    Given(:minimax) { Minimax.new(Board.new) }
-    Given { minimax.depth += 1 }
-    When { minimax.depth -= 1 }
-    Then { 0 == minimax.depth }
-  end
-end
-
 describe 'Minimax appropriate_player' do
   context 'when depth is at the root level' do
     Given(:const) { GameConstants.new }
     Given(:minimax) { Minimax.new(Board.new) }
-    Then { const.players[1] == minimax.appropriate_player }
+    Given(:depth) { 0 }
+    Then { const.players[1] == minimax.appropriate_player(depth) }
   end
 
   context 'when depth is an odd number' do
     Given(:const) { GameConstants.new }
     Given(:minimax) { Minimax.new(Board.new) }
-    When { minimax.depth += 1 }
-    Then { const.players[0] == minimax.appropriate_player }
+    Given(:depth) { 1 }
+    Then { const.players[0] == minimax.appropriate_player(depth) }
   end
+
+  context 'when depth is an even number' do
+    Given(:const) { GameConstants.new }
+    Given(:minimax) { Minimax.new(Board.new) }
+    Given(:depth) { 0 }
+    Then { const.players[1] == minimax.appropriate_player(depth) }
+  end
+
 end
 
 describe "Minimax optimum_choice" do
@@ -157,69 +113,79 @@ describe "Minimax optimum_choice" do
            board.mark(7, "O") } 
     Then { 6 == minimax.optimum_choice }
   end
+
+  context 'when there are two moves left and one wins' do
+    Given(:board) { Board.new }
+    Given(:minimax) { Minimax.new(board) }
+    When { board.mark(8, "X")
+           board.mark(0, "O")
+           board.mark(1, "X")
+           board.mark(2, "O")
+           board.mark(4, "X")
+           board.mark(3, "O")
+           board.mark(5, "X") }
+    Then { 6 == minimax.optimum_choice }
+  end
+
+   context 'when there are two moves left and one loses' do
+    Given(:board) { Board.new }
+    Given(:minimax) { Minimax.new(board) }
+    When { board.mark(1, "X")
+           board.mark(2, "O")
+           board.mark(4, "X")
+           board.mark(7, "O")
+           board.mark(5, "X")
+           board.mark(8, "O")
+           board.mark(6, "X") }
+    Then { 3 == minimax.optimum_choice }
+  end
+
+   context 'when there are two moves left and both draw' do
+    Given(:board) { Board.new }
+    Given(:minimax) { Minimax.new(board) }
+    When { board.mark(1, "X")
+           board.mark(0, "O")
+           board.mark(3, "X")
+           board.mark(4, "O")
+           board.mark(6, "X")
+           board.mark(7, "O")
+           board.mark(8, "X") }
+    Then { 2 == minimax.optimum_choice }
+  end
+
+  context 'when there are two moves left, one win, one loss' do
+    Given(:board) { Board.new }
+    Given(:minimax) { Minimax.new(board) }
+    When { board.mark(0, "X")
+           board.mark(4, "O")
+           board.mark(1, "X")
+           board.mark(7, "O")
+           board.mark(3, "X")
+           board.mark(8, "O")
+           board.mark(5, "X") }
+    Then { 6 == minimax.optimum_choice }
+  end 
+
+#  context 'when there is an early chance to win' do
+#    Given(:board) { Board.new }
+#    Given(:minimax) { Minimax.new(board) }
+#    When { board.mark(0, "X")
+#           board.mark(6, "O")
+#           board.mark(1, "X")
+#           board.mark(7, "O")
+#           board.mark(4, "X") }
+#    Then { 8 == minimax.optimum_choice }
+#  end 
 end
 
-#describe 'Minimax choose' do
-#  context 'when 7 is the only square left' do
-#    Given(:board) { [ "O","O","X",
-#                      "X","X","O",
-#                      "O",nil,"X" ] }
-#    When(:minimax) { Minimax.new }
-#    When(:choice) { minimax.choose(board) }
-#    Then { 7 == choice }
-#  end
-#
-#  context 'when 3 is the only square left' do
-#    Given(:board) { [ "O","X","O",
-#                      nil,"X","O",
-#                      "X","O","X" ] }
-#    When(:minimax) { Minimax.new }
-#    When(:choice) { minimax.choose(board) }
-#    Then { 3 == choice }
-#  end
+describe 'Minimax score_leaf_node_if_present' do
+  
+end
 
-#  context 'when one of two squares left will win the game' do
-#    Given(:board) { [ "O","X",nil,
-#                      "O","X","X",
-#                      nil,"O","X" ] }
-#    When(:minimax) { Minimax.new }
-#    When(:choice) { minimax.choose(board) }
-#    Then { 6 == choice }
-#  end
-#
-#  context 'when another one of two squares left will win the game' do
-#    Given(:board) { [ nil,"O","O",
-#                      "O","X","X",
-#                      "X","X",nil ] }
-#    When(:minimax) { Minimax.new }
-#    When(:choice) { minimax.choose(board) }
-#    Then { 0 == choice }
-#  end
-#
-#  context 'when one of four squares left will lose the game' do
-#    Given(:board) { [ "O","X","X",
-#                      nil,"O",nil,
-#                      nil,nil,"X" ] }
-#    When(:minimax) { Minimax.new }
-#    When(:choice) { minimax.choose(board) }
-#    Then { 5 == choice }
-#  end
-#
-#  context 'when another one of four squares left will lose the game' do
-#    Given(:board) { [ nil,nil,"O",
-#                      nil,"O","X",
-#                      "X",nil,"X" ] }
-#    When(:minimax) { Minimax.new }
-#    When(:choice) { minimax.choose(board) }
-#    Then { 7 == choice }
-#  end
-#
-#  context 'when one of five squares left will win the game' do
-#    Given(:board) { [ "O",nil,"X",
-#                      nil,"X",nil,
-#                      "O",nil,"X" ] }
-#    When(:minimax) { Minimax.new }
-#    When(:choice) { minimax.choose(board) }
-#    Then { 3 == choice }
-#  end
-#end
+ describe 'Minimax score_all_available_spaces' do
+  
+end
+
+ describe 'Minimax pick_the_best_choice' do
+  
+end 
