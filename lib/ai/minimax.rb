@@ -21,15 +21,25 @@ class Minimax
     elsif report == @const.winner(@const.players[0]) then return -1
     elsif report == @const.winner(@const.players[1]) then return 1 end
 
+    p "enter " + depth.to_s
+    p @board.available_spaces
     @board.available_spaces.each do |space|
-      @board.mark(space, appropriate_player(depth)) 
+      p spaces
+      p "evaluate space " + space.to_s
+      @board.mark(space, appropriate_player(depth))
       choices[space] = optimum_choice(@spaces, depth + 1, {})
+      p spaces
+      p choices
       @board.mark(space, nil)
     end
+    p "exit " + depth.to_s
 
-    optimal_score = choices.max_by { |space, score| score }[1]
     optimal_space = choices.max_by { |space, score| score }[0]
-    depth == 0 ? optimal_space : optimal_score
+    depth == 0 ? optimal_space : optimal_score(choices, depth)
+  end
+
+  def optimal_score(choices, depth)
+    choices.min_by { |space, score| score }[1]
   end
 
   def appropriate_player(depth)

@@ -46,6 +46,9 @@ describe 'Minimax appropriate_player' do
 
 end
 
+## = checked
+# = unchecked
+
 describe "Minimax optimum_choice" do
   context 'when the board is drawn' do
     Given(:board) { Board.new }
@@ -100,73 +103,84 @@ describe "Minimax optimum_choice" do
     Then { 1 == minimax.optimum_choice }
   end 
 
-  context 'when there is only one move left' do
+##  context 'when there is only one move left which wins' do
+##    Given(:board) { Board.new }
+##    Given(:minimax) { Minimax.new(board) }
+##    When { board.mark(8, "X")
+##           board.mark(0, "O")
+##           board.mark(1, "X")
+##           board.mark(2, "O")
+##           board.mark(4, "X")
+##           board.mark(3, "O")
+##           board.mark(5, "X")
+##           board.mark(7, "O") } 
+##    Then { 6 == minimax.optimum_choice }
+##  end
+##
+##  context 'when there are two moves left and one wins' do
+##    Given(:board) { Board.new }
+##    Given(:minimax) { Minimax.new(board) }
+##    When { board.mark(8, "X")
+##           board.mark(0, "O")
+##           board.mark(1, "X")
+##           board.mark(2, "O")
+##           board.mark(4, "X")
+##           board.mark(3, "O")
+##           board.mark(5, "X") }
+##    Then { 6 == minimax.optimum_choice }
+##  end
+##
+##   context 'when there are two moves left and one loses' do
+##    Given(:board) { Board.new }
+##    Given(:minimax) { Minimax.new(board) }
+##    When { board.mark(1, "X")
+##           board.mark(2, "O")
+##           board.mark(4, "X")
+##           board.mark(7, "O")
+##           board.mark(5, "X")
+##           board.mark(8, "O")
+##           board.mark(6, "X") }
+##    Then { 3 == minimax.optimum_choice }
+##  end
+##
+##   context 'when there are two moves left and both draw' do
+##    Given(:board) { Board.new }
+##    Given(:minimax) { Minimax.new(board) }
+##    When { board.mark(1, "X")
+##           board.mark(0, "O")
+##           board.mark(3, "X")
+##           board.mark(4, "O")
+##           board.mark(6, "X")
+##           board.mark(7, "O")
+##           board.mark(8, "X") }
+##    Then { 2 == minimax.optimum_choice }
+##  end
+##
+##  context 'when there are two moves left, one win, one loss' do
+##    Given(:board) { Board.new }
+##    Given(:minimax) { Minimax.new(board) }
+##    When { board.mark(0, "X")
+##           board.mark(4, "O")
+##           board.mark(1, "X")
+##           board.mark(7, "O")
+##           board.mark(3, "X")
+##           board.mark(8, "O")
+##           board.mark(5, "X") }
+##    Then { 6 == minimax.optimum_choice }
+##  end 
+##
+  context 'when there is an early chance to win and loose on rows' do
     Given(:board) { Board.new }
     Given(:minimax) { Minimax.new(board) }
     When { board.mark(8, "X")
            board.mark(0, "O")
-           board.mark(1, "X")
-           board.mark(2, "O")
-           board.mark(4, "X")
-           board.mark(3, "O")
-           board.mark(5, "X")
-           board.mark(7, "O") } 
-    Then { 6 == minimax.optimum_choice }
-  end
-
-  context 'when there are two moves left and one wins' do
-    Given(:board) { Board.new }
-    Given(:minimax) { Minimax.new(board) }
-    When { board.mark(8, "X")
-           board.mark(0, "O")
-           board.mark(1, "X")
-           board.mark(2, "O")
-           board.mark(4, "X")
-           board.mark(3, "O")
-           board.mark(5, "X") }
-    Then { 6 == minimax.optimum_choice }
-  end
-
-   context 'when there are two moves left and one loses' do
-    Given(:board) { Board.new }
-    Given(:minimax) { Minimax.new(board) }
-    When { board.mark(1, "X")
-           board.mark(2, "O")
-           board.mark(4, "X")
-           board.mark(7, "O")
-           board.mark(5, "X")
-           board.mark(8, "O")
-           board.mark(6, "X") }
-    Then { 3 == minimax.optimum_choice }
-  end
-
-   context 'when there are two moves left and both draw' do
-    Given(:board) { Board.new }
-    Given(:minimax) { Minimax.new(board) }
-    When { board.mark(1, "X")
-           board.mark(0, "O")
-           board.mark(3, "X")
-           board.mark(4, "O")
-           board.mark(6, "X")
-           board.mark(7, "O")
-           board.mark(8, "X") }
+           board.mark(7, "X")
+           board.mark(1, "O")
+           board.mark(4, "X") }
     Then { 2 == minimax.optimum_choice }
-  end
-
-  context 'when there are two moves left, one win, one loss' do
-    Given(:board) { Board.new }
-    Given(:minimax) { Minimax.new(board) }
-    When { board.mark(0, "X")
-           board.mark(4, "O")
-           board.mark(1, "X")
-           board.mark(7, "O")
-           board.mark(3, "X")
-           board.mark(8, "O")
-           board.mark(5, "X") }
-    Then { 6 == minimax.optimum_choice }
   end 
 
-#  context 'when there is an early chance to win' do
+#  context 'when there is an early chance to loose and win on rows' do
 #    Given(:board) { Board.new }
 #    Given(:minimax) { Minimax.new(board) }
 #    When { board.mark(0, "X")
@@ -174,18 +188,28 @@ describe "Minimax optimum_choice" do
 #           board.mark(1, "X")
 #           board.mark(7, "O")
 #           board.mark(4, "X") }
-#    Then { 8 == minimax.optimum_choice }
-#  end 
-end
+#    Then { 6 == minimax.optimum_choice }
+#  end
+#
+  context 'when there is an early chance to loose and win on cols' do
+    Given(:board) { Board.new }
+    Given(:minimax) { Minimax.new(board) }
+    When { board.mark(3, "X")
+           board.mark(2, "O")
+           board.mark(6, "X")
+           board.mark(5, "O")
+           board.mark(4, "X") }
+    Then { 8 == minimax.optimum_choice }
+  end
 
-describe 'Minimax score_leaf_node_if_present' do
-  
+#  context 'when there is an early chance to win and loose on cols' do
+#    Given(:board) { Board.new }
+#    Given(:minimax) { Minimax.new(board) }
+#    When { board.mark(8, "X")
+#           board.mark(3, "O")
+#           board.mark(5, "X")
+#           board.mark(6, "O")
+#           board.mark(4, "X") }
+#    Then { 0 == minimax.optimum_choice }
+#  end
 end
-
- describe 'Minimax score_all_available_spaces' do
-  
-end
-
- describe 'Minimax pick_the_best_choice' do
-  
-end 
