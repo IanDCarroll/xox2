@@ -34,9 +34,12 @@ class Minimax
     end
     p "exit " + depth.to_s
 
+    @choices = choices
     optimal_space = choices.max_by { |space, score| score }[0]
     depth == 0 ? optimal_space : optimal_score(choices, depth)
   end
+
+  attr_reader :choices
 
   def optimal_score(choices, depth)
     choices.min_by { |space, score| score }[1]
