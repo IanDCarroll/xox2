@@ -221,4 +221,14 @@ describe "Minimax optimum_choice" do
     Then { 0 == minimax.optimum_choice }
     And  { {0=>1, 1=>-1, 2=>-1, 7=>-1} == minimax.choices }
   end
+
+  context 'when there is an early chance to lose' do
+    Given(:board) { Board.new }
+    Given(:minimax) { Minimax.new(board) }
+    When { board.mark(0, "X") 
+           board.mark(8, "O") 
+           board.mark(1, "X") }
+    Then { 2 == minimax.optimum_choice }
+    And { {2=>0, 3=>-1, 4=>-1, 5=>-1, 6=>-1, 7=>-1} == minimax.choices }
+  end
 end

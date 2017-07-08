@@ -42,7 +42,15 @@ class Minimax
   attr_reader :choices
 
   def optimal_score(choices, depth)
-    choices.min_by { |space, score| score }[1]
+    min = choices.min_by { |space, score| score }[1]
+    max = choices.max_by { |space, score| score }[1]
+    only = choices.first[1]
+    if depth == 1 then return min
+    elsif depth == 2 then return min
+    elsif depth == 3 then return max
+    elsif depth == 4 then return only
+    elsif depth == 5 then return only
+    else raise StandardError, "exceeded recursion depth " + depth.to_s end
   end
 
   def appropriate_player(depth)
