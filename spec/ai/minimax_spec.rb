@@ -138,6 +138,50 @@ describe 'Minimax appropriate_player' do
   end
 end
 
+describe 'Minimax optimal_score' do
+  context 'when there is one win one loss and depth is at min 1' do
+    Given(:minimax) { Minimax.new(Board.new) }
+    Given(:choices) { {5=>1, 8=>-1} }
+    Given(:depth) { 1 }
+    Then { -1 == minimax.optimal_score(choices, depth) }
+  end
+
+  context 'when there is one draw one win and depth is at min 1' do
+    Given(:minimax) { Minimax.new(Board.new) }
+    Given(:choices) { {5=>0, 8=>1} }
+    Given(:depth) { 1 }
+    Then { 0 == minimax.optimal_score(choices, depth) }
+  end
+
+  context 'when there is one draw one loss and depth is at min 1' do
+    Given(:minimax) { Minimax.new(Board.new) }
+    Given(:choices) { {5=>0, 8=>-1} }
+    Given(:depth) { 1 }
+    Then { -1 == minimax.optimal_score(choices, depth) }
+
+  end
+  context 'when there is one win one loss and depth is at max 2' do
+    Given(:minimax) { Minimax.new(Board.new) }
+    Given(:choices) { {5=>1, 8=>-1} }
+    Given(:depth) { 2 }
+    Then { 1 == minimax.optimal_score(choices, depth) }
+
+  end
+  context 'when there is one win one draw and depth is at max 2' do
+    Given(:minimax) { Minimax.new(Board.new) }
+    Given(:choices) { {5=>0, 8=>1} }
+    Given(:depth) { 2 }
+    Then { 1 == minimax.optimal_score(choices, depth) }
+
+  end
+  context 'when there is one draw one loss and depth is at max 2' do
+    Given(:minimax) { Minimax.new(Board.new) }
+    Given(:choices) { {5=>0, 8=>-1} }
+    Given(:depth) { 2 }
+    Then { 0 == minimax.optimal_score(choices, depth) }
+  end
+end
+
 describe "Minimax optimum_choice" do
   context 'when the board is drawn' do
     Given(:board) { Board.new }
@@ -189,7 +233,7 @@ describe "Minimax optimum_choice" do
            board.mark(7, "O")
            board.mark(4, "X") 
            board.mark(6, "O") }
-    Then { -1 == minimax.optimum_choice }
+    Then { 1 == minimax.optimum_choice }
   end 
 
   context 'when there are two moves left and one wins' do
@@ -248,123 +292,155 @@ describe "Minimax optimum_choice" do
     And  { {2=>-1, 6=>1} == minimax.choices }
   end 
 
-#  context 'when there is an early chance to win and loose on rows' do
-#    Given(:board) { Board.new }
-#    Given(:minimax) { Minimax.new(board) }
-#    When { board.mark(8, "X")
-#           board.mark(0, "O")
-#           board.mark(7, "X")
-#           board.mark(1, "O")
-#           board.mark(4, "X") }
-#    Then { 2 == minimax.optimum_choice }
-#    And  { {2=>1, 3=>-1, 5=>-1, 6=>0} == minimax.choices }
-#  end 
+  context 'when there is an early chance to win or fork on rows' do
+    Given(:board) { Board.new }
+    Given(:minimax) { Minimax.new(board) }
+    When { board.mark(8, "X")
+           board.mark(0, "O")
+           board.mark(7, "X")
+           board.mark(1, "O")
+           board.mark(4, "X") }
+    Then { 2 == minimax.optimum_choice }
+    And  { {2=>1, 3=>-1, 5=>-1, 6=>1} == minimax.choices }
+  end
 
-#  context 'when there is an early chance to loose and win on rows' do
-#    Given(:board) { Board.new }
-#    Given(:minimax) { Minimax.new(board) }
-#    When { board.mark(0, "X")
-#           board.mark(6, "O")
-#           board.mark(1, "X")
-#           board.mark(7, "O")
-#           board.mark(4, "X") }
-#    Then { 8 == minimax.optimum_choice }
-#    And  { {2=>-1, 3=>-1, 5=>-1, 8=>1} == minimax.choices }
-#  end
-#
-#  context 'when there is an early chance to loose and win on cols' do
-#    Given(:board) { Board.new }
-#    Given(:minimax) { Minimax.new(board) }
-#    When { board.mark(3, "X")
-#           board.mark(2, "O")
-#           board.mark(6, "X")
-#           board.mark(5, "O")
-#           board.mark(4, "X") }
-#    Then { 8 == minimax.optimum_choice }
-#    And  { {0=>0, 1=>-1, 7=>-1, 8=>1} == minimax.choices }
-#  end
-#
-#  context 'when there is an early chance to win and loose on cols' do
-#    Given(:board) { Board.new }
-#    Given(:minimax) { Minimax.new(board) }
-#    When { board.mark(8, "X")
-#           board.mark(3, "O")
-#           board.mark(5, "X")
-#           board.mark(6, "O")
-#           board.mark(4, "X") }
-#    Then { 0 == minimax.optimum_choice }
-#    And  { {0=>1, 1=>-1, 2=>-1, 7=>-1} == minimax.choices }
-#  end
-#
-#  context 'when there is an early chance to lose row on space 2' do
-#    Given(:board) { Board.new }
-#    Given(:minimax) { Minimax.new(board) }
-#    When { board.mark(0, "X") 
-#           board.mark(8, "O") 
-#           board.mark(1, "X") }
-#    Then { 2 == minimax.optimum_choice }
-#    And { {2=>0, 3=>-1, 4=>-1, 5=>-1, 6=>-1, 7=>-1} == minimax.choices }
-#  end
-#
-#  context 'when there is an early chance to lose row on space 6' do
-#    Given(:board) { Board.new }
-#    Given(:minimax) { Minimax.new(board) }
-#    When { board.mark(8, "X") 
-#           board.mark(0, "O") 
-#           board.mark(7, "X") }
-#    Then { 6 == minimax.optimum_choice }
-#    And { {1=>-1, 2=>-1, 3=>-1, 4=>-1, 5=>-1, 6=>0} == minimax.choices }
-#  end
-#
-#  context 'when there is an early chance to lose col on space 2' do
-#    Given(:board) { Board.new }
-#    Given(:minimax) { Minimax.new(board) }
-#    When { board.mark(8, "X") 
-#           board.mark(0, "O") 
-#           board.mark(5, "X") }
-#    Then { 2 == minimax.optimum_choice }
-#    And { {1=>-1, 2=>0, 3=>-1, 4=>-1, 6=>-1, 7=>-1} == minimax.choices }
-#  end
-#
-#  context 'when it chooses to distract against an L-fork' do
-#    Given(:board) { Board.new }
-#    Given(:minimax) { Minimax.new(board) }
-#    When { board.mark(2, "X") 
-#           board.mark(0, "O") 
-#           board.mark(4, "X") }
-#    Then { 6 == minimax.optimum_choice }
-#    And { {1=>-1, 3=>-1, 5=>-1, 6=>0, 7=>-1, 8=>-1} == minimax.choices }
-#  end
+  context 'when there is an early chance to win or fork on rows' do
+    Given(:board) { Board.new }
+    Given(:minimax) { Minimax.new(board) }
+    When { board.mark(8, "X")
+           board.mark(0, "O")
+           board.mark(4, "X")
+           board.mark(2, "O")
+           board.mark(6, "X") }
+    Then { 1 == minimax.optimum_choice }
+    And  { {1=>1, 3=>-1, 5=>-1, 7=>0} == minimax.choices }
+  end 
 
-#  context 'when it chooses to distract against a triangle fork' do
-#    Given(:board) { Board.new }
-#    Given(:minimax) { Minimax.new(board) }
-#    When { board.mark(4, "X") 
-#           board.mark(0, "O") 
-#           board.mark(8, "X") }
-#    Then { 2 == minimax.optimum_choice }
-#    And { {1=>-1, 2=>0, 3=>-1, 5=>-1, 6=>0, 7=>-1} == minimax.choices }
-#  end
+  context 'when there is an early chance to loose and win on rows' do
+    Given(:board) { Board.new }
+    Given(:minimax) { Minimax.new(board) }
+    When { board.mark(0, "X")
+           board.mark(6, "O")
+           board.mark(4, "X")
+           board.mark(8, "O")
+           board.mark(2, "X") }
+    Then { 7 == minimax.optimum_choice }
+    And  { {1=>0, 3=>-1, 5=>-1, 7=>1} == minimax.choices }
+  end
 
-#  context 'when an arrowhead fork has occured' do
-#    Given(:board) { Board.new }
-#    Given(:minimax) { Minimax.new(board) }
-#    When { board.mark(5, "X") 
-#           board.mark(4, "O") 
-#           board.mark(7, "X")
-#           board.mark(0, "O")
-#           board.mark(8, "X") }
-#    Then { 1 == minimax.optimum_choice }
-#    And { {1=>-1, 2=>-1, 3=>-1, 6=>-1} == minimax.choices }
-#  end
-#
-#  context 'when it chooses to block against an arrowhead fork' do
-#    Given(:board) { Board.new }
-#    Given(:minimax) { Minimax.new(board) }
-#    When { board.mark(5, "X") 
-#           board.mark(4, "O") 
-#           board.mark(7, "X") }
-#    Then { 2 == minimax.optimum_choice }
-#    And { {0=>-1, 1=>-1, 2=>0, 3=>-1, 6=>0, 8=>0} == minimax.choices }
-#  end
+  context 'when there is an early chance to loose and win on cols' do
+    Given(:board) { Board.new }
+    Given(:minimax) { Minimax.new(board) }
+    When { board.mark(0, "X")
+           board.mark(2, "O")
+           board.mark(4, "X")
+           board.mark(8, "O")
+           board.mark(6, "X") }
+    Then { 5 == minimax.optimum_choice }
+    And  { {1=>-1, 3=>0, 5=>1, 7=>-1} == minimax.choices }
+  end
+
+  context 'when there is an early chance to win against a fork on cols' do
+    Given(:board) { Board.new }
+    Given(:minimax) { Minimax.new(board) }
+    When { board.mark(8, "X")
+           board.mark(3, "O")
+           board.mark(5, "X")
+           board.mark(6, "O")
+           board.mark(4, "X") }
+    Then { 0 == minimax.optimum_choice }
+    And  { {0=>1, 1=>-1, 2=>-1, 7=>-1} == minimax.choices }
+  end
+
+  context 'when there is an early chance to lose and fork-win on space 2' do
+    Given(:board) { Board.new }
+    Given(:minimax) { Minimax.new(board) }
+    When { board.mark(0, "X") 
+           board.mark(8, "O") 
+           board.mark(1, "X") }
+    Then { 2 == minimax.optimum_choice }
+    And { {2=>1, 3=>-1, 4=>-1, 5=>-1, 6=>-1, 7=>-1} == minimax.choices }
+  end
+
+  context 'when there is an early chance to lose on space 8' do
+    Given(:board) { Board.new }
+    Given(:minimax) { Minimax.new(board) }
+    When { board.mark(0, "X") 
+           board.mark(2, "O") 
+           board.mark(4, "X") }
+    Then { 8 == minimax.optimum_choice }
+    And { {1=>-1, 3=>-1, 5=>-1, 6=>-1, 7=>-1, 8=>0} == minimax.choices }
+  end
+
+  context 'when it chooses to distract against an L-fork' do
+    Given(:board) { Board.new }
+    Given(:minimax) { Minimax.new(board) }
+    When { board.mark(2, "X") 
+           board.mark(0, "O") 
+           board.mark(4, "X") }
+    Then { 6 == minimax.optimum_choice }
+    And { {1=>-1, 3=>-1, 5=>-1, 6=>0, 7=>-1, 8=>-1} == minimax.choices }
+  end
+
+  context 'when it chooses to distract against a triangle fork' do
+    Given(:board) { Board.new }
+    Given(:minimax) { Minimax.new(board) }
+    When { board.mark(4, "X") 
+           board.mark(0, "O") 
+           board.mark(8, "X") }
+    Then { 2 == minimax.optimum_choice }
+    And { {1=>-1, 2=>0, 3=>-1, 5=>-1, 6=>0, 7=>-1} == minimax.choices }
+  end
+
+  context 'when an arrowhead fork has occured' do
+    Given(:board) { Board.new }
+    Given(:minimax) { Minimax.new(board) }
+    When { board.mark(5, "X") 
+           board.mark(4, "O") 
+           board.mark(7, "X")
+           board.mark(0, "O")
+           board.mark(8, "X") }
+    Then { 1 == minimax.optimum_choice }
+    And { {1=>-1, 2=>-1, 3=>-1, 6=>-1} == minimax.choices }
+  end
+
+  context 'when it chooses to block against an arrowhead fork' do
+    Given(:board) { Board.new }
+    Given(:minimax) { Minimax.new(board) }
+    When { board.mark(5, "X") 
+           board.mark(4, "O") 
+           board.mark(7, "X") }
+    Then { 2 == minimax.optimum_choice }
+    And { {0=>-1, 1=>-1, 2=>0, 3=>-1, 6=>0, 8=>0} == minimax.choices }
+  end
+
+  context 'when X takes the center' do
+    Given(:board) { Board.new }
+    Given(:minimax) { Minimax.new(board) }
+    When { board.mark(4, "X") } 
+    Then { 0 == minimax.optimum_choice }
+    And { {0=>0, 1=>-1, 2=>0, 
+           3=>-1,       5=>-1, 
+           6=>0, 7=>-1, 8=>0} == minimax.choices }
+  end
+
+  context 'when X takes a corner' do
+    Given(:board) { Board.new }
+    Given(:minimax) { Minimax.new(board) }
+    When { board.mark(0, "X") } 
+    Then { 4 == minimax.optimum_choice }
+    And { {       1=>-1, 2=>-1, 
+           3=>-1, 4=>0,  5=>-1, 
+           6=>-1, 7=>-1, 8=>-1} == minimax.choices }
+  end
+
+  context 'when X takes a side' do
+    Given(:board) { Board.new }
+    Given(:minimax) { Minimax.new(board) }
+    When { board.mark(1, "X") } 
+    Then { 0 == minimax.optimum_choice }
+    And { {0=> 0,       2=> 0, 
+           3=>-1, 4=> 0, 5=>-1, 
+           6=>-1, 7=> 0, 8=>-1} == minimax.choices }
+  end
 end
