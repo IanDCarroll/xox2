@@ -167,18 +167,3 @@ describe 'GameRunner start_game' do
     Then { nil == start_game }
   end
 end
-
-describe 'GameRunner make_a_move' do
-  context 'when the AI goes second' do
-    Given(:board) { Board.new }
-    Given(:adapter) { Adapter.new(MockShell.new) }
-    Given(:ai) { ComputerPlayer.new(board) }
-    Given(:game_runner) { GameRunner.new(board, Rules.new(board), adapter) }
-    When(:make_a_move) { game_runner.play(ai.pull_move) 
-                         game_runner.make_a_move }
-    Then{ { message: ["O", 0], 
-            board: ["O", nil, nil, 
-                    nil, "X", nil, 
-                    nil, nil, nil] } == make_a_move } 
-  end
-end

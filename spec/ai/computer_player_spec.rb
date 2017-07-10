@@ -18,8 +18,14 @@ describe 'ComputerPlayer pull_move' do
                        board: [ nil, nil, nil,
                                 nil, nil, nil,
                                 nil, nil, nil ] } }
-    Given(:computer) { ComputerPlayer.new(Board.new) }
+    Given(:board) { Board.new }
+    Given(:computer) { ComputerPlayer.new(board) }
+    When { board.mark(1,"X") 
+           board.mark(4,"O") 
+           board.mark(3,"X") 
+           board.mark(2,"O") 
+           board.mark(5,"X") }
     When(:pulled_move) { computer.pull_move }
-    Then { 4 == pulled_move }
+    Then { 0 == pulled_move }
   end
 end

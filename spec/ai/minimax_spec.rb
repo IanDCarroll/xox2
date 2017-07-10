@@ -413,34 +413,4 @@ describe "Minimax optimum_choice" do
     Then { 2 == minimax.optimum_choice }
     And { {0=>-1, 1=>-1, 2=>0, 3=>-1, 6=>0, 8=>0} == minimax.choices }
   end
-
-  context 'when X takes the center' do
-    Given(:board) { Board.new }
-    Given(:minimax) { Minimax.new(board) }
-    When { board.mark(4, "X") } 
-    Then { 0 == minimax.optimum_choice }
-    And { {0=>0, 1=>-1, 2=>0, 
-           3=>-1,       5=>-1, 
-           6=>0, 7=>-1, 8=>0} == minimax.choices }
-  end
-
-  context 'when X takes a corner' do
-    Given(:board) { Board.new }
-    Given(:minimax) { Minimax.new(board) }
-    When { board.mark(0, "X") } 
-    Then { 4 == minimax.optimum_choice }
-    And { {       1=>-1, 2=>-1, 
-           3=>-1, 4=>0,  5=>-1, 
-           6=>-1, 7=>-1, 8=>-1} == minimax.choices }
-  end
-
-  context 'when X takes a side' do
-    Given(:board) { Board.new }
-    Given(:minimax) { Minimax.new(board) }
-    When { board.mark(1, "X") } 
-    Then { 0 == minimax.optimum_choice }
-    And { {0=> 0,       2=> 0, 
-           3=>-1, 4=> 0, 5=>-1, 
-           6=>-1, 7=> 0, 8=>-1} == minimax.choices }
-  end
 end
