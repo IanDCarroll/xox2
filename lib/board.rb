@@ -18,6 +18,6 @@ class Board
   end
 
   def reset_marks
-    @spaces = Array.new(@size)
+    @spaces.each_index { |space| mark(space, nil) }
   end
 end
