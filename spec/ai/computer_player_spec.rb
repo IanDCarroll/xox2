@@ -20,6 +20,6 @@ describe 'ComputerPlayer pull_move' do
                                 nil, nil, nil ] } }
     Given(:computer) { ComputerPlayer.new(Board.new) }
     When(:pulled_move) { computer.pull_move }
-    Then { 0 == pulled_move }
+    Then { 4 == pulled_move }
   end
 end

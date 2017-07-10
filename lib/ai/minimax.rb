@@ -11,8 +11,8 @@ class Minimax
     @spaces = @board.spaces
   end
 
-  def choose #first available to validate integration
-    @board.available_spaces[0]
+  def choose
+    optimum_choice
   end
 
   def optimum_choice(board = @board, depth = 0, choices = {})
