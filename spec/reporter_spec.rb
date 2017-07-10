@@ -12,10 +12,10 @@ end
 
 describe 'Reporter report' do
   context 'when reporter is informed of a change' do
-    Given(:board) { ["1","2","X",
-                     "4","5","6",
-                     "7","8","9"] }
-    Given(:status) { { player: "X", space: 2, moves: 1, size: 9, 
+    Given(:board) { [nil,nil,"X",
+                     nil,nil,nil,
+                     nil,nil,nil] }
+    Given(:status) { { space: 2, 
                        board: board } }
     Given(:subject) { Reporter.new }
     When(:action) { subject.report(status) }
@@ -23,22 +23,45 @@ describe 'Reporter report' do
   end
 
   context 'when reporter is informed of another change' do
-    Given(:board) { ["1","2","X",
-                     "4","O","6",
-                     "7","8","9"] }
-    Given(:status) { { player: "O", space: 4, moves: 2, size: 9, 
+    Given(:board) { [nil,nil,"X",
+                     nil,"O",nil,
+                     nil,nil,nil] }
+    Given(:status) { { space: 4, 
                       board: board} }
     When(:action) { subject.report(status) }
     Given(:subject) { Reporter.new }
     Then { ["O", 4] == action }
   end
 
+  context 'when reporter ignores integers for wins' do
+    Given(:board) { [ 1 ,nil,"X",
+                      1 ,"O",nil,
+                      1 ,nil,nil] }
+    Given(:status) { { space: 4, 
+                       board: board} }
+    When(:action) { subject.report(status) }
+    Given(:subject) { Reporter.new }
+    Then { ["O", 4] == action }
+  end
+
+  context 'when reporter ignores integers for draws' do
+    Given(:board) { [ 1 , 1 ,"X",
+                      1 ,"O", 1 ,
+                      1 , 1 , 1 ] }
+    Given(:status) { { space: 4, 
+                       board: board} }
+    When(:action) { subject.report(status) }
+    Given(:subject) { Reporter.new }
+    Then { ["O", 4] == action }
+  end
+
+
   context 'when reporter encounters a full board' do
     Given(:const) { GameConstants.new }
     Given(:board) { ["O","X","O",
                      "X","X","O",
                      "X","O","X"] }
-    Given(:status) { { player: "X", space: 8, moves: 9, size: 9, 
+    Given(:status) { { space: 8, 
                        board: board} }
     Given(:subject) { Reporter.new }
     When(:action) { subject.report(status) }
@@ -46,112 +69,166 @@ describe 'Reporter report' do
   end
 
   context 'when reporter encounters a win in row 1' do
+    Given(:const) { GameConstants.new }
     Given(:board) { ["X","X","X",
-                     "O","5","6",
-                     "7","O","9"] }
-    Given(:status) { { player: "X", space: 8, moves: 5, size: 9, 
+                     "O",nil,nil,
+                     nil,"O",nil] }
+    Given(:status) { { space: 2,
                        board: board} }
     Given(:subject) { Reporter.new }
     When(:action) { subject.report(status) }
-    Then { ["X", "win" ] == action }
+    Then { const.winner(status[:board][status[:space]]) == action }
   end
 
   context 'when reporter encounters a win in row 2' do
-    Given(:board) { ["1","O","3",
+    Given(:const) { GameConstants.new }
+    Given(:board) { [nil,"O",nil,
                      "X","X","X",
-                     "7","O","9"] }
-    Given(:status) { { player: "X", space: 8, moves: 5, size: 9, 
+                     nil,"O",nil] }
+    Given(:status) { { space: 4, 
                        board: board} }
     Given(:subject) { Reporter.new }
     When(:action) { subject.report(status) }
-    Then { ["X", "win" ] == action }
+    Then { const.winner(status[:board][status[:space]]) == action }
   end
 
   context 'when reporter encounters a different player win' do
-    Given(:board) { ["1","X","X",
+    Given(:const) { GameConstants.new }
+    Given(:board) { [nil,"X","X",
                      "O","O","O",
-                     "7","X","9"] }
-    Given(:status) { { player: "O", space: 8, moves: 6, size: 9, 
+                     nil,"X",nil] }
+    Given(:status) { { space: 4, 
                        board: board} }
     Given(:subject) { Reporter.new }
     When(:action) { subject.report(status) }
-    Then { ["O", "win" ] == action }
+    Then { const.winner(status[:board][status[:space]]) == action }
   end
 
   context 'when reporter encounters a win in row 3' do
-    Given(:board) { ["O","O","3",
-                     "4","5","6",
+    Given(:const) { GameConstants.new }
+    Given(:board) { ["O","O",nil,
+                     nil,nil,nil,
                      "X","X","X"] }
-    Given(:status) { { player: "X", space: 8, moves: 5, size: 9, 
+    Given(:status) { { space: 8, 
                        board: board} }
     Given(:subject) { Reporter.new }
     When(:action) { subject.report(status) }
-    Then { ["X", "win" ] == action }
+    Then { const.winner(status[:board][status[:space]]) == action }
   end
 
   context 'when reporter encounters a win in column 1' do
-    Given(:board) { ["X","2","3",
-                     "X","5","6",
+    Given(:const) { GameConstants.new }
+    Given(:board) { ["X",nil,nil,
+                     "X",nil,nil,
                      "X","O","O"] }
-    Given(:status) { { player: "X", space: 8, moves: 5, size: 9, 
+    Given(:status) { { space: 6, 
                        board: board} }
     Given(:subject) { Reporter.new }
     When(:action) { subject.report(status) }
-    Then { ["X", "win" ] == action }
+    Then { const.winner(status[:board][status[:space]]) == action }
   end
 
   context 'when reporter encounters a win in column 2' do
-    Given(:board) { ["1","X","3",
+    Given(:const) { GameConstants.new }
+    Given(:board) { [nil,"X",nil,
                      "O","X","O",
-                     "7","X","9"] }
-    Given(:status) { { player: "X", space: 8, moves: 5, size: 9, 
+                     nil,"X",nil] }
+    Given(:status) { { space: 4, 
                        board: board} }
     Given(:subject) { Reporter.new }
     When(:action) { subject.report(status) }
-    Then { ["X", "win" ] == action }
+    Then { const.winner(status[:board][status[:space]]) == action }
   end
 
   context 'when reporter encounters a win in column 3' do
-    Given(:board) { ["1","O","X",
-                     "4","5","X",
-                     "O","8","X"] }
-    Given(:status) { { player: "X", space: 8, moves: 5, size: 9, 
+    Given(:const) { GameConstants.new }
+    Given(:board) { [nil,"O","X",
+                     nil,nil,"X",
+                     "O",nil,"X"] }
+    Given(:status) { { space: 8, 
                        board: board} }
     Given(:subject) { Reporter.new }
     When(:action) { subject.report(status) }
-    Then { ["X", "win" ] == action }
+    Then { const.winner(status[:board][status[:space]]) == action }
   end
 
   context 'when reporter encounters a win in dexter diagonal' do
+    Given(:const) { GameConstants.new }
     Given(:board) { ["X","O","X",
-                     "4","X","O",
-                     "O","8","X"] }
-    Given(:status) { { player: "X", space: 8, moves: 7, size: 9, 
+                     nil,"X","O",
+                     "O",nil,"X"] }
+    Given(:status) { { player: "X", space: 8, 
                        board: board} }
     Given(:subject) { Reporter.new }
     When(:action) { subject.report(status) }
-    Then { ["X", "win" ] == action }
+    Then { const.winner(status[:board][status[:space]]) == action }
   end
 
   context 'when reporter encounters a win in sinister diagonal' do
+    Given(:const) { GameConstants.new }
     Given(:board) { ["X","O","X",
-                     "O","X","6",
-                     "X","8","O"] }
-    Given(:status) { { player: "X", space: 8, moves: 7, size: 9, 
+                     "O","X",nil,
+                     "X",nil,"O"] }
+    Given(:status) { { space: 2, 
                        board: board} }
     Given(:subject) { Reporter.new }
     When(:action) { subject.report(status) }
-    Then { ["X", "win" ] == action }
+    Then { const.winner(status[:board][status[:space]]) == action }
   end
 
   context 'when reporter encounters a win on a full board' do
+    Given(:const) { GameConstants.new }
     Given(:board) { ["X","O","X",
                      "O","X","X",
                      "X","O","O"] }
-    Given(:status) { { player: "X", space: 8, moves: 9, size: 9, 
+    Given(:status) { { space: 2, 
                        board: board} }
     Given(:subject) { Reporter.new }
     When(:action) { subject.report(status) }
-    Then { ["X", "win" ] == action }
+    Then { const.winner(status[:board][status[:space]]) == action }
   end
+
+  context 'when reporter is asked to report non-win without space' do
+    Given(:board) { [nil,nil,"X",
+                     nil,nil,nil,
+                     nil,nil,nil] }
+    Given(:status) { { board: board } }
+    Given(:subject) { Reporter.new }
+    When(:action) { subject.report(status) }
+    Then { nil == action }
+  end
+
+  context 'when reporter is asked to report an X win without space' do
+    Given(:const) { GameConstants.new }
+    Given(:board) { ["X","X","X",
+                     nil,nil,nil,
+                     nil,"O","O"] }
+    Given(:status) { { board: board } }
+    Given(:subject) { Reporter.new }
+    When(:action) { subject.report(status) }
+    Then { const.winner(const.players[0]) == action }
+  end
+
+  context 'when reporter is asked to report an O win without space' do
+    Given(:const) { GameConstants.new }
+    Given(:board) { ["X","X",nil,
+                     nil,"X",nil,
+                     "O","O","O"] }
+    Given(:status) { { board: board } }
+    Given(:subject) { Reporter.new }
+    When(:action) { subject.report(status) }
+    Then { const.winner(const.players[1]) == action }
+  end
+
+  context 'when reporter is asked to report a draw without space' do
+    Given(:const) { GameConstants.new }
+    Given(:board) { ["X","X","O",
+                     "O","X","X",
+                     "X","O","O"] }
+    Given(:status) { { board: board } }
+    Given(:subject) { Reporter.new }
+    When(:action) { subject.report(status) }
+    Then { const.draw == action }
+  end
+
 end

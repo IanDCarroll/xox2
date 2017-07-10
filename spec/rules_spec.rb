@@ -13,9 +13,9 @@ describe 'Rules mark' do
     Given(:board) { Board.new }
     Given(:rules) { Rules.new(board) }
     When(:subject) { rules.mark(4) }
-    Then { [ "1","2","3",
-             "4","X","6",
-             "7","8","9" ] == board.spaces }
+    Then { [ nil,nil,nil,
+             nil,"X",nil,
+             nil,nil,nil ] == board.spaces }
     And { ["X", 4] == subject } 
   end
 
@@ -24,20 +24,19 @@ describe 'Rules mark' do
     Given(:rules) { Rules.new(board) }
     Given { rules.mark(4) }
     When(:subject) { rules.mark(0) }
-    Then { [ "O","2","3",
-             "4","X","6",
-             "7","8","9" ] == board.spaces }
+    Then { [ "O",nil,nil,
+             nil,"X",nil,
+             nil,nil,nil ] == board.spaces }
     And { ["O", 0] == subject }
   end
 end
 
 describe "Rules reset" do
   context "when a played game is reset" do
-    Given(:reset_game) { { player: "O",
-                           space: "any value",
-                           board: [ "1", "2", "3",
-                                    "4", "5", "6",
-                                    "7", "8", "9" ] } }
+    Given(:reset_game) { { space: "any value",
+                           board: [ nil, nil, nil,
+                                    nil, nil, nil,
+                                    nil, nil, nil ] } }
     Given(:game_moves) { [ "5", "2", "1", "9", "7", "4", "3" ] }
     Given(:board) { Board.new }
     Given(:rules) { Rules.new(board) }

@@ -7,10 +7,16 @@ class BoardConstructor
   end
 
   def construct(board)
-    @board = board
+    @board = board.dup
+    paint_numbers_over_empty_spaces
     rows = []
     (0...size).step(square) do |i| rows << construct_row(i) end
     rows.join(@style.shelf)
+  end
+
+  def paint_numbers_over_empty_spaces
+    @board.each_index { |space|
+      if @board[space].nil? then @board[space] = (space + 1).to_s end }
   end
 
   def size

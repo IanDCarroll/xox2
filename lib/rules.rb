@@ -13,7 +13,7 @@ class Rules
 
   def mark(space)
     swap_players
-    @board.mark(@current_player, space)
+    @board.mark(space, @current_player)
     @reporter.report(status(space))
   end
 
@@ -25,13 +25,12 @@ class Rules
   end
 
   def status(space)
-    { player: @current_player, 
-      space: space, 
+    { space: space, 
       board: @board.spaces }
   end
 
   def reset
-    @board.paint_numbers_over_spaces
+    @board.reset_marks
     @current_player = @player[1]
   end
 end
